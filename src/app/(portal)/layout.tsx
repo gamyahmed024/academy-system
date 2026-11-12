@@ -1,3 +1,4 @@
+import { Logo } from "@/components/logo";
 import Link from "next/link";
 import { requirePortal } from "@/server/session";
 import { getDb } from "@/db";
@@ -17,7 +18,7 @@ export default async function PortalLayout({ children }: { children: React.React
       <header className="bg-sidebar text-sidebar-text">
         <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-3">
           <Link href="/my" className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand font-extrabold text-white">{s.academyName.slice(0, 1)}</span>
+            <Logo size={38} />
             <span className="font-extrabold text-white">{s.academyName}</span>
           </Link>
           <div className="flex flex-wrap items-center gap-4 text-sm">

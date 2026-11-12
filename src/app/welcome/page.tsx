@@ -1,3 +1,4 @@
+import { Logo } from "@/components/logo";
 import Link from "next/link";
 import { getDb } from "@/db";
 import { getSettings } from "@/server/services/money";
@@ -42,9 +43,7 @@ export default async function Welcome() {
       <header className="sticky top-0 z-20 bg-sidebar text-white shadow-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <div className="flex min-w-0 items-center gap-2.5">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent text-xl font-extrabold">
-              {s.academyName.slice(0, 1)}
-            </span>
+            <Logo size={42} />
             <span className="truncate text-lg font-extrabold">{s.academyName}</span>
           </div>
           <div className="flex shrink-0 items-center gap-3">

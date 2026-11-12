@@ -1,3 +1,4 @@
+import { Logo } from "@/components/logo";
 import { requireStaff } from "@/server/session";
 import { getDb } from "@/db";
 import { getSettings } from "@/server/services/money";
@@ -13,9 +14,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
       <aside className="relative bg-sidebar p-3 md:sticky md:top-0 md:h-screen md:w-56 md:shrink-0 md:p-4">
         <div className="mb-3 flex items-center justify-between md:mb-6 md:block">
           <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand font-extrabold text-white">
-              {s.academyName.slice(0, 1)}
-            </span>
+            <Logo size={38} />
             <span className="font-extrabold text-white">{s.academyName}</span>
           </div>
         </div>

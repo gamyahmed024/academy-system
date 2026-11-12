@@ -1,3 +1,4 @@
+import { Logo } from "@/components/logo";
 import { redirect } from "next/navigation";
 import { getCurrentUser, homeFor } from "@/server/session";
 import { getDb } from "@/db";
@@ -22,9 +23,7 @@ export default async function LoginPage(props: PageProps<"/login">) {
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-gradient-to-br from-brand to-brand-dark p-4">
       <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl">
         <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand text-2xl font-extrabold text-white">
-            {s.academyName.slice(0, 1)}
-          </div>
+          <Logo size={72} className="mx-auto mb-3" />
           <h1 className="text-xl font-extrabold">{s.academyName}</h1>
           <p className="text-sm text-slate-500">{t("loginSubtitle")}</p>
         </div>
