@@ -23,6 +23,9 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
         <div className="mt-4 border-t border-white/10 pt-4 text-sm text-sidebar-text md:absolute md:bottom-4 md:w-48">
           <div className="font-semibold text-white">{user.name}</div>
           <div className="text-xs">{user.role === "admin" ? "الإدارة" : "سكرتارية"}</div>
+          <a href="/welcome" target="_blank" rel="noopener" className="mt-2 block text-xs underline hover:text-white">
+            عرض الصفحة الرئيسية للزوار ↗
+          </a>
           <form action={logout}>
             <button className="mt-2 text-xs underline hover:text-white">تسجيل الخروج</button>
           </form>

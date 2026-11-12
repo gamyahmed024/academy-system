@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { getCurrentUser, homeFor } from "@/server/session";
 import { getDb } from "@/db";
 import { getSettings } from "@/server/services/money";
 import { getT } from "@/server/lang";
@@ -24,8 +22,8 @@ const WHY_ICONS = ["🕒", "👤", "▶", "↩", "👪", "🌐"];
 
 /** The public page a visitor sees before signing in. */
 export default async function Welcome() {
-  const me = await getCurrentUser();
-  if (me) redirect(homeFor(me.role));
+  // Signed-in users can open it too (staff preview it from the sidebar);
+  // its sign-in buttons then lead them back to their own home.
   const s = await getSettings(getDb());
   const { lang, t } = await getT();
   const x = LANDING[lang];
