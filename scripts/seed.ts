@@ -21,11 +21,11 @@ async function main() {
   const demo = process.argv.includes("--demo");
   // The code is public, so a default password is only allowed for local demo data.
   const password = process.env.ADMIN_PASSWORD ?? (demo ? "change-me-now" : "");
-  if (password.length < 10) {
-    throw new Error("Set ADMIN_PASSWORD (at least 10 characters) before seeding.");
-  }
   let [admin] = await db.select().from(users).where(eq(users.email, email));
   if (!admin) {
+    if (password.length < 10) {
+      throw new Error("Set ADMIN_PASSWORD (at least 10 characters) before seeding.");
+    }
     admin = await createUser(db, { name: "عمر", email, password, role: "admin" });
     console.log(`admin created: ${email}`);
   } else console.log(`admin exists: ${email}`);

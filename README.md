@@ -30,11 +30,14 @@ npm run dev                   # http://localhost:3000
 
 ولو عايز بيانات تجريبية علشان تجرب: `npm run seed -- --demo`
 
-## النشر أونلاين (مجانًا)
+## النشر أونلاين (مجانًا، من المتصفح بس)
 
-1. **قاعدة البيانات**: اعمل مشروع على [Supabase](https://supabase.com)، وخد الرابط من Connect ← Session pooler.
-2. **الموقع**: اربط الـ repo بـ [Vercel](https://vercel.com)، وضيف `DATABASE_URL` في Environment Variables.
-3. شغّل `npm run db:migrate` و `npm run seed` مرة واحدة، وفي الـ `.env` خلي `DATABASE_URL` هو رابط Supabase.
+1. **قاعدة البيانات**: اعمل مشروع على [Supabase](https://supabase.com)، واختار منطقة قريبة (Frankfurt مثلًا). بعد كده اضغط Connect، وخد الرابط اللي تحت Session pooler، وحط مكان `[YOUR-PASSWORD]` كلمة سر قاعدة البيانات.
+2. **الموقع**: ادخل على [Vercel](https://vercel.com) بحساب GitHub، واضغط Add New ← Project، واختار `academy-system`. وقبل Deploy، افتح Environment Variables وضيف:
+   - `DATABASE_URL`: رابط Supabase
+   - `ADMIN_EMAIL`: إيميلك اللي هتدخل بيه
+   - `ADMIN_PASSWORD`: كلمة سر قوية، 10 حروف على الأقل
+3. اضغط Deploy. أول مرة بينشئ الجداول وحساب الإدارة لوحده، وبعد كده كل تعديل بيترفع على GitHub بينزل أونلاين لوحده.
 
 ## للمطورين
 
