@@ -17,6 +17,9 @@
   --accent-soft: #fbf1e3;
   --sidebar: #0c2f4a;
   --sidebar-text: #cfe4f3;
+  /* Warm paper tones behind the public welcome page */
+  --ivory: #fbf8f1;
+  --sand: #f1e8d8;
 }
 
 @theme inline {
@@ -28,6 +31,8 @@
   --color-accent-soft: var(--accent-soft);
   --color-sidebar: var(--sidebar);
   --color-sidebar-text: var(--sidebar-text);
+  --color-ivory: var(--ivory);
+  --color-sand: var(--sand);
   --font-sans: "Cairo", system-ui, sans-serif;
 }
 
@@ -82,5 +87,126 @@ body {
   }
   .link {
     @apply font-semibold text-brand hover:underline;
+  }
+}
+
+/*
+ * Motion on the welcome page. Everything is visible without it: the scroll
+ * reveal only runs where the browser supports scroll-driven animations, and
+ * nothing moves for visitors who ask for reduced motion.
+ */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+}
+@keyframes float-soft {
+  50% {
+    transform: translateY(-8px);
+  }
+}
+/* Living photos: a slow drift, a hero that changes picture, a band that slides as you scroll. */
+@keyframes drift {
+  to {
+    transform: scale(1.14) translate(-2%, -1.5%);
+  }
+}
+@keyframes hero-second {
+  0%,
+  30% {
+    opacity: 0;
+  }
+  36%,
+  64% {
+    opacity: 1;
+  }
+  70%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes hero-third {
+  0%,
+  64% {
+    opacity: 0;
+  }
+  70%,
+  94% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes band-slide {
+  from {
+    transform: scale(1.25) translateY(-8%);
+  }
+  to {
+    transform: scale(1.25) translateY(8%);
+  }
+}
+/* Extra hero pictures stay hidden unless motion is allowed. */
+.hero-second,
+.hero-third {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .drift {
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+  .hero-second {
+    animation:
+      drift 18s ease-in-out infinite alternate,
+      hero-second 21s ease-in-out infinite;
+  }
+  .hero-third {
+    animation:
+      drift 18s ease-in-out infinite alternate-reverse,
+      hero-third 21s ease-in-out infinite;
+  }
+  .zoom-frame img {
+    transition: scale 0.7s ease;
+  }
+  .zoom-frame:hover img {
+    scale: 1.12;
+  }
+  .band-slide {
+    animation: drift 24s ease-in-out infinite alternate;
+  }
+  @supports (animation-timeline: view()) {
+    .band-slide {
+      animation: band-slide linear both;
+      animation-timeline: view();
+    }
+  }
+  .pop-in {
+    animation: pop-in 0.22s ease-out both;
+  }
+  .float-soft {
+    animation: float-soft 5s ease-in-out infinite;
+  }
+  .lift {
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px -18px rgb(12 47 74 / 0.35);
+  }
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
   }
 }
