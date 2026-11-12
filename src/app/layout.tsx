@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const viewport: Viewport = { themeColor: "#0f6e6e" };
+export const viewport: Viewport = { themeColor: "#0c2f4a" };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const lang = await getLang();

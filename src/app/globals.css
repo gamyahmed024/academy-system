@@ -5,23 +5,25 @@
 @import "@fontsource/cairo/800.css";
 
 /*
- * Brand colours live here only. The academy name and colours are not decided
- * yet: change these variables and the whole system follows.
+ * Brand colours live here only: sky blue on deep navy, with a warm gold
+ * accent. Change these variables and the whole system follows.
  */
 :root {
-  --brand: #0f6e6e;
-  --brand-dark: #13505a;
-  --brand-soft: #e8f3f2;
+  --brand: #0f76b8;
+  --brand-dark: #0b4f80;
+  --brand-soft: #e6f4fc;
+  --sky: #4fbdf3;
   --accent: #c9822b;
   --accent-soft: #fbf1e3;
-  --sidebar: #14363b;
-  --sidebar-text: #cfe3e1;
+  --sidebar: #0c2f4a;
+  --sidebar-text: #cfe4f3;
 }
 
 @theme inline {
   --color-brand: var(--brand);
   --color-brand-dark: var(--brand-dark);
   --color-brand-soft: var(--brand-soft);
+  --color-sky: var(--sky);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-sidebar: var(--sidebar);

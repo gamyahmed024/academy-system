@@ -49,7 +49,7 @@ export default async function Welcome() {
           </div>
           <div className="flex shrink-0 items-center gap-3">
             <LangSwitch current={lang} label={t("language")} />
-            <Link href="/login" className="rounded-lg border border-white/40 px-3 py-1.5 text-sm font-bold hover:bg-white/10">
+            <Link href="/login" className="hidden rounded-lg border border-white/40 px-3 py-1.5 text-sm font-bold hover:bg-white/10 sm:inline-block">
               {x.signIn}
             </Link>
           </div>
@@ -57,11 +57,11 @@ export default async function Welcome() {
       </header>
 
       <section className="relative overflow-hidden bg-gradient-to-br from-sidebar via-brand-dark to-brand text-white">
-        <div aria-hidden className="pointer-events-none absolute -end-10 -top-16 select-none text-[22rem] leading-none font-extrabold opacity-[0.06]">
+        <div aria-hidden className="pointer-events-none absolute -end-10 -top-16 select-none text-[22rem] leading-none font-extrabold text-sky opacity-[0.12]">
           ض
         </div>
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
-          <p className="mb-4 inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-semibold text-accent-soft">{x.heroTag}</p>
+          <p className="mb-4 inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-semibold text-sky">{x.heroTag}</p>
           <h1 className="max-w-3xl text-3xl leading-snug font-extrabold sm:text-5xl sm:leading-tight">{x.heroTitle}</h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-white/85">{x.heroText}</p>
           <div className="mt-8 flex flex-wrap gap-3">
