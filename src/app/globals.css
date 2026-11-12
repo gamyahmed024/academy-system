@@ -112,7 +112,81 @@ body {
     transform: translateY(-8px);
   }
 }
+/* Living photos: a slow drift, a hero that changes picture, a band that slides as you scroll. */
+@keyframes drift {
+  to {
+    transform: scale(1.14) translate(-2%, -1.5%);
+  }
+}
+@keyframes hero-second {
+  0%,
+  30% {
+    opacity: 0;
+  }
+  36%,
+  64% {
+    opacity: 1;
+  }
+  70%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes hero-third {
+  0%,
+  64% {
+    opacity: 0;
+  }
+  70%,
+  94% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes band-slide {
+  from {
+    transform: scale(1.25) translateY(-8%);
+  }
+  to {
+    transform: scale(1.25) translateY(8%);
+  }
+}
+/* Extra hero pictures stay hidden unless motion is allowed. */
+.hero-second,
+.hero-third {
+  opacity: 0;
+}
 @media (prefers-reduced-motion: no-preference) {
+  .drift {
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+  .hero-second {
+    animation:
+      drift 18s ease-in-out infinite alternate,
+      hero-second 21s ease-in-out infinite;
+  }
+  .hero-third {
+    animation:
+      drift 18s ease-in-out infinite alternate-reverse,
+      hero-third 21s ease-in-out infinite;
+  }
+  .zoom-frame img {
+    transition: scale 0.7s ease;
+  }
+  .zoom-frame:hover img {
+    scale: 1.12;
+  }
+  .band-slide {
+    animation: drift 24s ease-in-out infinite alternate;
+  }
+  @supports (animation-timeline: view()) {
+    .band-slide {
+      animation: band-slide linear both;
+      animation-timeline: view();
+    }
+  }
   .pop-in {
     animation: pop-in 0.22s ease-out both;
   }

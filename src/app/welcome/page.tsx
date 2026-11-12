@@ -81,7 +81,9 @@ export default async function Welcome() {
           </div>
           <div className="relative mx-auto w-full max-w-md lg:max-w-none">
             <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-2xl ring-4 ring-white/20">
-              <Image src={PHOTO.hero.src} alt="" fill priority unoptimized sizes="(min-width: 1024px) 560px, 100vw" className="object-cover" />
+              <Image src={PHOTO.hero.src} alt="" fill priority unoptimized sizes="(min-width: 1024px) 560px, 100vw" className="drift object-cover" />
+              <Image src={PHOTO.program2.src} alt="" fill unoptimized sizes="(min-width: 1024px) 560px, 100vw" className="hero-second object-cover" />
+              <Image src={PHOTO.program1.src} alt="" fill unoptimized sizes="(min-width: 1024px) 560px, 100vw" className="hero-third object-cover" />
             </div>
             <div className="float-soft absolute -bottom-6 start-4 rounded-2xl bg-white px-5 py-3 text-center shadow-xl sm:start-8">
               <div dir="rtl" lang="ar" className="text-2xl leading-relaxed font-bold text-sidebar">
@@ -99,8 +101,8 @@ export default async function Welcome() {
         <div className="grid gap-7 md:grid-cols-3">
           {x.programs.map(([title, text], i) => (
             <div key={title} className="reveal lift overflow-hidden rounded-3xl border border-slate-200/70 bg-white text-center shadow-sm">
-              <div className="relative aspect-[3/2]">
-                <Image src={PROGRAM_PHOTOS[i].src} alt="" fill unoptimized sizes="(min-width: 768px) 370px, 100vw" className="object-cover" />
+              <div className="zoom-frame relative aspect-[3/2] overflow-hidden">
+                <Image src={PROGRAM_PHOTOS[i].src} alt="" fill unoptimized sizes="(min-width: 768px) 370px, 100vw" className="drift object-cover" style={{ animationDelay: `${-i * 5}s` }} />
               </div>
               <div className="px-6 pb-7">
                 <div className="relative mx-auto -mt-8 mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-3xl font-extrabold text-brand shadow-md ring-1 ring-slate-100">
@@ -181,7 +183,7 @@ export default async function Welcome() {
       </section>
 
       <section className="relative isolate overflow-hidden text-white">
-        <Image src={PHOTO.culture.src} alt="" fill unoptimized sizes="100vw" className="-z-20 object-cover" />
+        <Image src={PHOTO.culture.src} alt="" fill unoptimized sizes="100vw" className="band-slide -z-20 object-cover" />
         <div aria-hidden className="absolute inset-0 -z-10 bg-sidebar/60" />
         <div className="reveal mx-auto max-w-3xl px-4 py-24 text-center">
           <h2 className="text-2xl font-extrabold sm:text-4xl">{m.cultureTitle}</h2>
