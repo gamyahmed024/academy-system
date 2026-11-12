@@ -57,6 +57,10 @@ export async function recordAttendance(
     const members = l.studentId ? [l.studentId] : await groupStudentIds(tx, l.groupId!);
     assert(members.includes(input.studentId), "الطالب ده مش في الحصة دي");
     if (input.state === "excused") assert(input.noticeAt, "اكتب امتى الطالب اعتذر");
+    assert(
+      input.state === "excused" || input.state === "teacher_cancelled" || l.startsAt.getTime() <= Date.now(),
+      "الحصة لسه مبدأتش. قبل الحصة تقدر تسجل اعتذار أو إلغاء من المدرس بس",
+    );
 
     const policy = await getSettings(tx);
     const d = decideAttendance(input.state, l.startsAt, input.noticeAt ?? null, policy);
@@ -330,4 +334,15 @@ export async function walletHistory(db: DB, walletId: number) {
     .leftJoin(payments, eq(payments.id, creditEntries.paymentId))
     .where(eq(creditEntries.walletId, walletId))
     .orderBy(desc(creditEntries.createdAt), desc(creditEntries.id));
+}
+
+export async function studentAttendance(db: DB, studentId: number, limit = 30) {
+  return db
+    .select({ a: attendance, startsAt: lessons.startsAt, teacherName: teachers.name, lessonId: lessons.id })
+    .from(attendance)
+    .innerJoin(lessons, eq(lessons.id, attendance.lessonId))
+    .innerJoin(teachers, eq(teachers.id, lessons.teacherId))
+    .where(eq(attendance.studentId, studentId))
+    .orderBy(desc(lessons.startsAt))
+    .limit(limit);
 }

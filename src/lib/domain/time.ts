@@ -1,5 +1,8 @@
 import { DateTime } from "luxon";
 
+/** Arabic month/day names with Latin digits, to match times and amounts. */
+export const AR = "ar-EG-u-nu-latn";
+
 /** ISO weekday: 1 = Monday ... 7 = Sunday (same as luxon). */
 export type IsoWeekday = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
@@ -69,7 +72,7 @@ export function fmtTime(d: Date, timezone: string): string {
 }
 
 export function fmtDate(d: Date, timezone: string): string {
-  return inZone(d, timezone).setLocale("ar-EG").toFormat("cccc d LLLL");
+  return inZone(d, timezone).setLocale(AR).toFormat("cccc d LLLL");
 }
 
 export function fmtDateTime(d: Date, timezone: string): string {

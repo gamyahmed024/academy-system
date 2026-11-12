@@ -217,6 +217,14 @@ describe("money and reports", () => {
     expect(r).toEqual({ id: expect.any(Number), deducted: true, teacherPaid: false });
   });
 
+  it("refuses to mark a future lesson as attended", async () => {
+    const [future] = await listLessons(db, { from: new Date("2030-01-01"), to: new Date("2031-01-01") });
+    const l = future ?? (await createLesson(db, { teacherId: ids.mahmoud, studentId: ids.john, date: "2030-01-07", time: "10:00", timezone: "Africa/Cairo", minutes: 30 }, ids.admin));
+    await expect(recordAttendance(db, { lessonId: l.id, studentId: ids.john, state: "present" }, ids.admin)).rejects.toThrow("لسه مبدأتش");
+    const r = await recordAttendance(db, { lessonId: l.id, studentId: ids.john, state: "excused", noticeAt: new Date("2030-01-01T00:00:00Z") }, ids.admin);
+    expect(r.deducted).toBe(false);
+  });
+
   it("validates input with readable errors", async () => {
     await expect(
       recordPayment(db, { studentId: ids.john, amount: "-5", currency: "USD", rateToEgp: "50", lessonsCredited: 1, method: "x", paidOn: "2026-11-01" }, ids.admin),

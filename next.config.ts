@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
+// Every screen is per-user and must show live data (attendance, balances), so
+// pages render on each request; Cache Components is intentionally left off.
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
   turbopack: {
     rules: {
       "*.css": {

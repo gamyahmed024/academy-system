@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# نظام إدارة الأكاديمية
 
-## Getting Started
+نظام أونلاين لإدارة أكاديمية تعليم الأجانب. بيفتح من المتصفح، وتقدر تثبّته كأيقونة على الكمبيوتر أو الموبايل (PWA).
 
-First, run the development server:
+## اللي موجود في المرحلة 1
+
+- **الطلاب**: ملف لكل طالب فيه توقيته وحالته ورصيده وحضوره ومدفوعاته، وكمان زرار رسالة واتساب جاهزة.
+- **العائلات**: ولي أمر واحد ليه أكتر من طالب، وكلهم بيصرفوا من محفظة حصص واحدة مشتركة. لو طالب انضم لعيلة، رصيده بيتنقل معاه.
+- **المدرسين**: لكل مدرس رابط حصة ثابت (Meet أو Zoom) بيتسجل مرة واحدة. فيه كمان أجر الحصة، ومستحقات الشهر، وقفل الشهر علشان المبلغ يتثبت.
+- **المجموعات**.
+- **الجدول**: حصة واحدة أو حصص متكررة كل أسبوع، ومعادها بيتثبت على توقيت الطالب. تقدر تنقل أو تلغي حصة واحدة من السلسلة من غير ما الباقي يتأثر، والنظام بيرفض أي حصة بتتعارض مع حصة تانية للمدرس أو للطالب.
+- **الحضور**: حضر / اتأخر / غاب / اعتذر / المدرس لغى. سياسة الاعتذار (24 ساعة مثلًا) بتحدد الحصة تتخصم ولا لأ. وتقدر تعدّل التسجيل بعدين من غير ما الرصيد يتلخبط.
+- **المدفوعات**: كل دفعة بعملتها، ومعاها سعر الصرف يوم الدفع، فتقارير الشهور اللي فاتت مبتتغيرش. والإيصال بيتطبع أو يتحفظ PDF.
+- **التقارير** (للإدارة بس): الدخل بالجنيه وحسب كل عملة، ومستحقات المدرسين، والصافي.
+- **الصلاحيات**: "إدارة" شايفة كل حاجة. "سكرتارية" بتدير اليومي من غير ما تشوف التقارير المالية أو الإعدادات.
+
+حسابات المدرسين والطلاب وأولياء الأمور جاية في المرحلة 2.
+
+## التشغيل على جهازك
+
+محتاج Node.js 22 وقاعدة بيانات PostgreSQL، سواء على جهازك أو مجانًا على Supabase.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env          # وحط فيه رابط قاعدة البيانات
+npm run db:migrate            # إنشاء الجداول
+ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='كلمة-سر-قوية' npm run seed
+npm run dev                   # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ولو عايز بيانات تجريبية علشان تجرب: `npm run seed -- --demo`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## النشر أونلاين (مجانًا)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **قاعدة البيانات**: اعمل مشروع على [Supabase](https://supabase.com)، وخد الرابط من Connect ← Session pooler.
+2. **الموقع**: اربط الـ repo بـ [Vercel](https://vercel.com)، وضيف `DATABASE_URL` في Environment Variables.
+3. شغّل `npm run db:migrate` و `npm run seed` مرة واحدة، وفي الـ `.env` خلي `DATABASE_URL` هو رابط Supabase.
 
-## Learn More
+## للمطورين
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js 16 (App Router، وServer Actions) + TypeScript + Tailwind 4
+- PostgreSQL عن طريق Drizzle ORM. الجداول في `src/db/schema.ts` والـ migrations في `drizzle/`
+- منطق الشغل في `src/server/services/`، والقواعد البحتة (التوقيت والفلوس والحضور) في `src/lib/domain/`
+- `npm test`: اختبارات القواعد، وسيناريوهات المحاكاة كاملة على قاعدة بيانات حقيقية (`TEST_DATABASE_URL`)
+- `npm run typecheck` و `npx eslint .`
+- الألوان كلها في أول `src/app/globals.css`، واسم الأكاديمية بيتغير من صفحة الإعدادات

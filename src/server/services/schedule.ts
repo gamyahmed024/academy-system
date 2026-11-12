@@ -94,6 +94,13 @@ export class ConflictError extends UserError {
   }
 }
 
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
+function checkDateTime(date: string, time: string) {
+  assert(DATE_RE.test(date), "التاريخ مش صحيح");
+  assert(TIME_RE.test(time), "الوقت مش صحيح");
+}
+
 type Target = { teacherId: number; studentId?: number | null; groupId?: number | null };
 
 async function checkTarget(db: Conn, t: Target) {
@@ -116,6 +123,7 @@ export async function createLesson(
   by: number | null,
 ) {
   assert(input.minutes >= 15 && input.minutes <= 240, "مدة الحصة لازم تكون بين 15 و240 دقيقة");
+  checkDateTime(input.date, input.time);
   return db.transaction(async (tx) => {
     await checkTarget(tx, input);
     const startsAt = zonedToUtc(input.date, input.time, input.timezone);
@@ -162,6 +170,8 @@ export async function createSeries(
   assert(input.weekdays.length > 0, "اختار يوم واحد على الأقل");
   assert(input.weekdays.every((d) => d >= 1 && d <= 7), "أيام الأسبوع مش صحيحة");
   assert(input.minutes >= 15 && input.minutes <= 240, "مدة الحصة لازم تكون بين 15 و240 دقيقة");
+  checkDateTime(input.startDate, input.localTime);
+  assert(DATE_RE.test(input.endDate), "تاريخ النهاية مش صحيح");
   assert(input.startDate <= input.endDate, "تاريخ النهاية لازم يكون بعد البداية");
   const starts = expandWeekly({
     weekdays: input.weekdays,
@@ -229,6 +239,7 @@ export async function moveLesson(
   input: { date: string; time: string; timezone: string; minutes?: number; reason?: string | null },
   by: number | null,
 ) {
+  checkDateTime(input.date, input.time);
   return db.transaction(async (tx) => {
     const l = await lockLesson(tx, id);
     assert(l.status === "scheduled", "مينفعش تنقل حصة اتلغت أو اتسجل حضورها");
