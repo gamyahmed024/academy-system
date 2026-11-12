@@ -7,6 +7,7 @@ import { listPayments } from "@/server/services/money";
 import { fmtMoney } from "@/lib/domain/rules";
 import { timezoneLabel } from "@/lib/domain/time";
 import { ActionForm } from "@/components/action-form";
+import { PortalAccountCard } from "@/components/portal-account";
 import { PageHeader, BackLink, Kpi, Empty, StatusBadge } from "@/components/ui";
 import { GuardianFields } from "../guardian-form";
 import { updateGuardianAction } from "../actions";
@@ -70,6 +71,7 @@ export default async function FamilyPage(props: PageProps<"/families/[id]">) {
             </table>
           )}
         </section>
+        <PortalAccountCard kind="guardian" id={g.id} defaultEmail={g.email} />
         <section className="card lg:col-span-2">
           <h2 className="mb-3 font-bold">بيانات ولي الأمر</h2>
           <ActionForm action={updateGuardianAction.bind(null, g.id)}>

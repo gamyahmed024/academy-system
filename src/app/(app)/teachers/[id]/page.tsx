@@ -10,6 +10,7 @@ import { getSettings, teacherMonthLessons } from "@/server/services/money";
 import { fmtMoney, mulMoney } from "@/lib/domain/rules";
 import { fmtDate, fmtTime, monthKey, inZone } from "@/lib/domain/time";
 import { ActionForm } from "@/components/action-form";
+import { PortalAccountCard } from "@/components/portal-account";
 import { PageHeader, BackLink, Kpi, Empty, Badge, JoinButton } from "@/components/ui";
 import { TeacherFields } from "../teacher-form";
 import { updateTeacherAction, closeMonthAction, markPaidAction } from "../actions";
@@ -99,6 +100,7 @@ export default async function TeacherPage(props: PageProps<"/teachers/[id]">) {
           </section>
         )}
 
+        <PortalAccountCard kind="teacher" id={t.id} defaultEmail={t.email} />
         <section className="card lg:col-span-2">
           <h2 className="mb-3 font-bold">بيانات المدرس</h2>
           <ActionForm action={updateTeacherAction.bind(null, t.id)}><TeacherFields t={t} /></ActionForm>

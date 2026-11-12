@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/server/session";
+import { getCurrentUser, homeFor } from "@/server/session";
 import { getDb } from "@/db";
 import { getSettings } from "@/server/services/money";
 import { ActionForm } from "@/components/action-form";
@@ -7,8 +7,10 @@ import { login } from "./actions";
 
 export const metadata = { title: "تسجيل الدخول" };
 
-export default async function LoginPage() {
-  if (await getCurrentUser()) redirect("/");
+export default async function LoginPage(props: PageProps<"/login">) {
+  const changed = (await props.searchParams).changed === "1";
+  const me = await getCurrentUser();
+  if (me) redirect(homeFor(me.role));
   const s = await getSettings(getDb());
   return (
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand to-brand-dark p-4">
@@ -20,6 +22,7 @@ export default async function LoginPage() {
           <h1 className="text-xl font-extrabold">{s.academyName}</h1>
           <p className="text-sm text-slate-500">سجّل دخولك علشان تكمل</p>
         </div>
+        {changed && <p className="mb-4 rounded-lg bg-brand-soft p-3 text-center text-sm font-semibold text-brand">اتغيرت كلمة السر. ادخل بالجديدة.</p>}
         <ActionForm action={login} submit="دخول" submitClass="btn w-full">
           <div className="space-y-4">
             <label className="block">

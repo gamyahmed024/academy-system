@@ -73,7 +73,7 @@ export const guardians = pgTable("guardians", {
     .references(() => wallets.id),
   notes: text("notes"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+}, (t) => [uniqueIndex("guardians_user_uq").on(t.userId)]);
 
 export const students = pgTable(
   "students",
@@ -96,7 +96,11 @@ export const students = pgTable(
     notes: text("notes"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [index("students_guardian_idx").on(t.guardianId), index("students_wallet_idx").on(t.walletId)],
+  (t) => [
+    index("students_guardian_idx").on(t.guardianId),
+    index("students_wallet_idx").on(t.walletId),
+    uniqueIndex("students_user_uq").on(t.userId),
+  ],
 );
 
 export const teachers = pgTable("teachers", {
@@ -112,7 +116,7 @@ export const teachers = pgTable("teachers", {
   payPerLessonEgp: numeric("pay_per_lesson_egp", { precision: 12, scale: 2 }).notNull().default("0"),
   status: personStatusEnum("status").notNull().default("active"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+}, (t) => [uniqueIndex("teachers_user_uq").on(t.userId)]);
 
 export const groups = pgTable("groups", {
   id: serial("id").primaryKey(),

@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getDb } from "@/db";
 import { verifyLogin, startSession, endSession } from "@/server/services/auth";
-import { SESSION_COOKIE } from "@/server/session";
+import { SESSION_COOKIE, homeFor } from "@/server/session";
 import { str, type ActionState } from "@/server/action";
 
 export async function login(_: ActionState, form: FormData): Promise<ActionState> {
@@ -19,7 +19,7 @@ export async function login(_: ActionState, form: FormData): Promise<ActionState
     path: "/",
     expires: expiresAt,
   });
-  redirect("/");
+  redirect(homeFor(user.role));
 }
 
 export async function logout() {

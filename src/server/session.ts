@@ -19,9 +19,14 @@ export type CurrentUser = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>
 export async function requireRole(...roles: Role[]): Promise<CurrentUser> {
   const u = await getCurrentUser();
   if (!u) redirect("/login");
-  if (!roles.includes(u.role)) redirect("/?denied=1");
+  if (!roles.includes(u.role)) redirect(isStaff(u.role) ? "/?denied=1" : "/my");
   return u;
 }
+
+export const isStaff = (r: Role) => r === "admin" || r === "staff";
+/** Where each role lands after login. */
+export const homeFor = (r: Role) => (isStaff(r) ? "/" : "/my");
+export const requirePortal = () => requireRole("teacher", "student", "guardian");
 
 export const requireStaff = () => requireRole("admin", "staff");
 export const requireAdmin = () => requireRole("admin");

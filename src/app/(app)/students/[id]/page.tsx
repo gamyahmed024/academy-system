@@ -7,6 +7,7 @@ import { listLessons } from "@/server/services/schedule";
 import { getSettings, listPayments, studentAttendance, walletHistory } from "@/server/services/money";
 import { fmtDate, fmtTime, timezoneLabel } from "@/lib/domain/time";
 import { ATTENDANCE_LABELS, fmtMoney } from "@/lib/domain/rules";
+import { PortalAccountCard } from "@/components/portal-account";
 import { PageHeader, BackLink, Kpi, Badge, Empty, StatusBadge, JoinButton, whatsappLink } from "@/components/ui";
 
 export const metadata = { title: "ملف الطالب" };
@@ -148,6 +149,7 @@ export default async function StudentPage(props: PageProps<"/students/[id]">) {
             </ul>
           )}
         </section>
+        <PortalAccountCard kind="student" id={s.id} defaultEmail={s.email} />
       </div>
       {s.notes && <div className="card mt-6 whitespace-pre-line text-sm"><b>ملاحظات:</b> {s.notes}</div>}
     </div>
