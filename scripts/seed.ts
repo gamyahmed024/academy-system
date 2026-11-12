@@ -2,7 +2,7 @@
  * npm run seed            → creates the first admin user (if none exists)
  * npm run seed -- --demo  → also fills the database with demo data around today
  *
- * Admin credentials come from ADMIN_EMAIL / ADMIN_PASSWORD (or the defaults below).
+ * Admin credentials come from ADMIN_EMAIL / ADMIN_PASSWORD (required, except with --demo).
  */
 import "dotenv/config";
 import { DateTime } from "luxon";
@@ -18,14 +18,19 @@ async function main() {
   const db = getDb();
   await getSettings(db);
   const email = process.env.ADMIN_EMAIL ?? "admin@academy.local";
-  const password = process.env.ADMIN_PASSWORD ?? "change-me-now";
+  const demo = process.argv.includes("--demo");
+  // The code is public, so a default password is only allowed for local demo data.
+  const password = process.env.ADMIN_PASSWORD ?? (demo ? "change-me-now" : "");
+  if (password.length < 10) {
+    throw new Error("Set ADMIN_PASSWORD (at least 10 characters) before seeding.");
+  }
   let [admin] = await db.select().from(users).where(eq(users.email, email));
   if (!admin) {
     admin = await createUser(db, { name: "عمر", email, password, role: "admin" });
-    console.log(`admin created: ${email} / ${password}`);
+    console.log(`admin created: ${email}`);
   } else console.log(`admin exists: ${email}`);
 
-  if (!process.argv.includes("--demo")) return;
+  if (!demo) return;
   const by = admin.id;
   const tz = "Africa/Cairo";
   const now = DateTime.now().setZone(tz);

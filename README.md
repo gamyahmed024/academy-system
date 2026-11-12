@@ -24,7 +24,7 @@
 npm install
 cp .env.example .env          # وحط فيه رابط قاعدة البيانات
 npm run db:migrate            # إنشاء الجداول
-ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='كلمة-سر-قوية' npm run seed
+ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='كلمة-سر-قوية' npm run seed   # كلمة السر 10 حروف على الأقل
 npm run dev                   # http://localhost:3000
 ```
 
