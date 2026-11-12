@@ -71,12 +71,12 @@ export function fmtTime(d: Date, timezone: string): string {
   return inZone(d, timezone).toFormat("HH:mm");
 }
 
-export function fmtDate(d: Date, timezone: string): string {
-  return inZone(d, timezone).setLocale(AR).toFormat("cccc d LLLL");
+export function fmtDate(d: Date, timezone: string, locale: string = AR): string {
+  return inZone(d, timezone).setLocale(locale).toFormat("cccc d MMMM");
 }
 
-export function fmtDateTime(d: Date, timezone: string): string {
-  return `${fmtDate(d, timezone)} · ${fmtTime(d, timezone)}`;
+export function fmtDateTime(d: Date, timezone: string, locale: string = AR): string {
+  return `${fmtDate(d, timezone, locale)} · ${fmtTime(d, timezone)}`;
 }
 
 /** "YYYY-MM" month key of an instant, in a timezone. */

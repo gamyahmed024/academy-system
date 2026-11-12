@@ -154,7 +154,7 @@ export async function excuseLesson(db: DB, u: PortalUser, lessonId: number, stud
     .from(attendance)
     .where(and(eq(attendance.lessonId, lessonId), eq(attendance.studentId, studentId)));
   assert(!existing, "الحصة دي متسجلة بالفعل");
-  return recordAttendance(db, { lessonId, studentId, state: "excused", noticeAt: new Date(), note: "اعتذار من الموقع" }, u.id);
+  return recordAttendance(db, { lessonId, studentId, state: "excused", noticeAt: new Date(), note: null }, u.id);
 }
 
 const TEACHER_STATES: AttendanceState[] = ["present", "late", "absent", "teacher_cancelled"];

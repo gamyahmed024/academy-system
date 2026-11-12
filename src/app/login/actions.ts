@@ -6,11 +6,13 @@ import { getDb } from "@/db";
 import { verifyLogin, startSession, endSession } from "@/server/services/auth";
 import { SESSION_COOKIE, homeFor } from "@/server/session";
 import { str, type ActionState } from "@/server/action";
+import { getLang } from "@/server/lang";
+import { isLang, translateError, LANG_COOKIE } from "@/lib/i18n";
 
 export async function login(_: ActionState, form: FormData): Promise<ActionState> {
   const db = getDb();
   const user = await verifyLogin(db, str(form, "email"), str(form, "password"));
-  if (!user) return { error: "الإيميل أو كلمة السر غلط" };
+  if (!user) return { error: translateError(await getLang(), "الإيميل أو كلمة السر غلط") };
   const { token, expiresAt } = await startSession(db, user.id);
   (await cookies()).set(SESSION_COOKIE, token, {
     httpOnly: true,
@@ -19,6 +21,11 @@ export async function login(_: ActionState, form: FormData): Promise<ActionState
     path: "/",
     expires: expiresAt,
   });
+  // A language the person picked before (saved on the account) wins over the browser's.
+  const jar = await cookies();
+  if (!jar.has(LANG_COOKIE) && user.locale !== "ar" && isLang(user.locale)) {
+    jar.set(LANG_COOKIE, user.locale, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
+  }
   redirect(homeFor(user.role));
 }
 

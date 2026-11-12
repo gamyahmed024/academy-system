@@ -1,9 +1,13 @@
 import { notFound } from "next/navigation";
 import { requirePortal } from "@/server/session";
+import { getT } from "@/server/lang";
 import { TeacherHome } from "./teacher-home";
 import { FamilyHome } from "./family-home";
 
-export const metadata = { title: "صفحتي" };
+export async function generateMetadata() {
+  const { t } = await getT();
+  return { title: t("home") };
+}
 
 export default async function MyHome() {
   const user = await requirePortal();

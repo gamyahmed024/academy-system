@@ -77,19 +77,19 @@ export const STATUS_OPTIONS = [
   ["stopped", "منتهي"],
 ] as const;
 
-export function BackLink({ href, children }: { href: string; children: ReactNode }) {
+export function BackLink({ href, children, ltr }: { href: string; children: ReactNode; ltr?: boolean }) {
   return (
     <Link href={href} className="mb-3 inline-block text-sm text-slate-500 hover:text-brand">
-      → {children}
+      {ltr ? "←" : "→"} {children}
     </Link>
   );
 }
 
-export function JoinButton({ url, small }: { url: string | null; small?: boolean }) {
-  if (!url) return <span className="text-xs text-slate-400">مفيش رابط</span>;
+export function JoinButton({ url, small, label = "▶ ادخل الحصة", noLink = "مفيش رابط" }: { url: string | null; small?: boolean; label?: string; noLink?: string }) {
+  if (!url) return <span className="text-xs text-slate-400">{noLink}</span>;
   return (
     <a href={url} target="_blank" rel="noopener noreferrer" className={`btn ${small ? "btn-sm" : ""}`}>
-      ▶ ادخل الحصة
+      {label}
     </a>
   );
 }

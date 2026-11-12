@@ -11,18 +11,19 @@ type Props = {
   className?: string;
   resetOnSuccess?: boolean;
   confirm?: string;
+  pendingLabel?: string;
 };
 
-function SubmitButton({ label, className, pending }: { label: string; className: string; pending: boolean }) {
+function SubmitButton({ label, className, pending, pendingLabel }: { label: string; className: string; pending: boolean; pendingLabel: string }) {
   return (
     <button type="submit" className={className} disabled={pending}>
-      {pending ? "لحظة…" : label}
+      {pending ? pendingLabel : label}
     </button>
   );
 }
 
 /** A form bound to a server action that shows its error or success message. */
-export function ActionForm({ action, children, submit = "حفظ", submitClass = "btn", className, resetOnSuccess, confirm }: Props) {
+export function ActionForm({ action, children, submit = "حفظ", submitClass = "btn", className, resetOnSuccess, confirm, pendingLabel = "لحظة…" }: Props) {
   const [state, formAction, pending] = useActionState(action, undefined);
   const ref = useRef<HTMLFormElement>(null);
   useEffect(() => {
@@ -43,7 +44,7 @@ export function ActionForm({ action, children, submit = "حفظ", submitClass = 
     >
       {children}
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        <SubmitButton label={submit} className={submitClass} pending={pending} />
+        <SubmitButton label={submit} className={submitClass} pending={pending} pendingLabel={pendingLabel} />
         {state?.error && (
           <p role="alert" className="text-sm font-semibold text-red-700">
             {state.error}

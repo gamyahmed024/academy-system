@@ -8,7 +8,8 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
   const user = await requireStaff();
   const s = await getSettings(getDb());
   return (
-    <div className="min-h-screen md:flex">
+    // staff pages are always Arabic, whatever language the browser picked
+    <div lang="ar" dir="rtl" className="min-h-screen md:flex">
       <aside className="relative bg-sidebar p-3 md:sticky md:top-0 md:h-screen md:w-56 md:shrink-0 md:p-4">
         <div className="mb-3 flex items-center justify-between md:mb-6 md:block">
           <div className="flex items-center gap-2">
