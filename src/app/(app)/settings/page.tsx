@@ -32,6 +32,7 @@ export default async function Settings() {
               </select>
             </Field>
             <Field label="نبّهني لما رصيد الطالب يوصل لـ"><input name="lowBalanceThreshold" type="number" min={0} max={10} defaultValue={s.lowBalanceThreshold} className="input" /></Field>
+            <Field label="واتساب الأكاديمية" hint="بكود الدولة، مثلًا +201001234567. بيظهر كزرار تواصل في الصفحة الرئيسية للزوار، ولو سبته فاضي الزرار مش هيظهر."><input name="contactWhatsapp" defaultValue={s.contactWhatsapp ?? ""} className="input ltr text-left" inputMode="tel" /></Field>
           </div>
         </ActionForm>
       </section>

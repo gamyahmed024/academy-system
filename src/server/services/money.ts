@@ -29,13 +29,18 @@ export async function getSettings(db: Conn) {
 
 export async function updateSettings(
   db: DB,
-  input: { academyName: string; freeCancelHours: number; payTeacherOnNoShow: boolean; lowBalanceThreshold: number },
+  input: { academyName: string; freeCancelHours: number; payTeacherOnNoShow: boolean; lowBalanceThreshold: number; contactWhatsapp?: string | null },
   by: number | null,
 ) {
   assert(input.academyName.trim(), "اكتب اسم الأكاديمية");
   assert(input.freeCancelHours >= 0 && input.freeCancelHours <= 168, "عدد الساعات مش منطقي");
   await getSettings(db);
-  await db.update(settings).set({ ...input, academyName: input.academyName.trim() }).where(eq(settings.id, 1));
+  const contactWhatsapp = input.contactWhatsapp?.trim() || null;
+  assert(!contactWhatsapp || contactWhatsapp.replace(/\D/g, "").length >= 8, "اكتب رقم الواتساب بكود الدولة");
+  await db
+    .update(settings)
+    .set({ ...input, academyName: input.academyName.trim(), ...(input.contactWhatsapp !== undefined ? { contactWhatsapp } : {}) })
+    .where(eq(settings.id, 1));
   await audit(db, by, "update", "settings", 1, input);
 }
 

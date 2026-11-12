@@ -41,3 +41,18 @@ describe("translations", () => {
     expect(translateError("de", "رسالة مش معروفة")).toBe("رسالة مش معروفة");
   });
 });
+
+import { LANDING } from "@/lib/i18n/landing";
+
+describe("welcome page text", () => {
+  it("has the same shape in every language", () => {
+    for (const code of LANG_CODES) {
+      const x = LANDING[code];
+      expect(x.programs, code).toHaveLength(3);
+      expect(x.steps, code).toHaveLength(3);
+      expect(x.why, code).toHaveLength(6);
+      expect(x.why[3][1], code).toContain("{h}");
+      for (const [a, b] of [...x.programs, ...x.steps, ...x.why]) expect(a && b, code).toBeTruthy();
+    }
+  });
+});

@@ -15,6 +15,13 @@
       "when": 1794467736802,
       "tag": "0001_portal_accounts",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794474199110,
+      "tag": "0002_welcome_contact",
+      "breakpoints": true
     }
   ]
 }
