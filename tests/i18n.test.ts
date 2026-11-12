@@ -56,3 +56,17 @@ describe("welcome page text", () => {
     }
   });
 });
+
+import { LANDING_MORE, DEMO_WORDS } from "@/lib/i18n/landing-more";
+
+describe("welcome page extras", () => {
+  it("has every station and a meaning for every demo word", () => {
+    for (const code of LANG_CODES) {
+      const m = LANDING_MORE[code];
+      expect(m.path, code).toHaveLength(5);
+      expect(m.meanings, code).toHaveLength(DEMO_WORDS.length);
+      for (const [a, b] of m.path) expect(a && b, code).toBeTruthy();
+      for (const v of [...m.meanings, m.pathTitle, m.tryTitle, m.tryHint, m.listen, m.cultureTitle, m.cultureText, m.credits]) expect(v, code).toBeTruthy();
+    }
+  });
+});

@@ -17,6 +17,9 @@
   --accent-soft: #fbf1e3;
   --sidebar: #0c2f4a;
   --sidebar-text: #cfe4f3;
+  /* Warm paper tones behind the public welcome page */
+  --ivory: #fbf8f1;
+  --sand: #f1e8d8;
 }
 
 @theme inline {
@@ -28,6 +31,8 @@
   --color-accent-soft: var(--accent-soft);
   --color-sidebar: var(--sidebar);
   --color-sidebar-text: var(--sidebar-text);
+  --color-ivory: var(--ivory);
+  --color-sand: var(--sand);
   --font-sans: "Cairo", system-ui, sans-serif;
 }
 
@@ -82,5 +87,52 @@ body {
   }
   .link {
     @apply font-semibold text-brand hover:underline;
+  }
+}
+
+/*
+ * Motion on the welcome page. Everything is visible without it: the scroll
+ * reveal only runs where the browser supports scroll-driven animations, and
+ * nothing moves for visitors who ask for reduced motion.
+ */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+}
+@keyframes float-soft {
+  50% {
+    transform: translateY(-8px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pop-in {
+    animation: pop-in 0.22s ease-out both;
+  }
+  .float-soft {
+    animation: float-soft 5s ease-in-out infinite;
+  }
+  .lift {
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px -18px rgb(12 47 74 / 0.35);
+  }
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
   }
 }
