@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { getDb } from "@/db";
 import { requireStaff } from "@/server/session";
-import { listTrialRequests, REQUEST_STATUSES } from "@/server/services/requests";
+import { listTrialRequests, listPasswordHelp, REQUEST_STATUSES } from "@/server/services/requests";
 import { fmtDateTime, timezoneLabel } from "@/lib/domain/time";
 import { getSettings } from "@/server/services/money";
 import { LANGS, isLang } from "@/lib/i18n";
 import { PageHeader, Empty, Badge, whatsappLink } from "@/components/ui";
 import { ActionForm } from "@/components/action-form";
-import { updateRequestAction } from "./actions";
+import { updateRequestAction, passwordHandledAction } from "./actions";
 
-export const metadata = { title: "طلبات الحصص التجريبية" };
+export const metadata = { title: "الطلبات" };
 
 const STATUS: Record<string, [string, "accent" | "blue" | "green" | "gray"]> = {
   new: ["جديد", "accent"],
@@ -29,12 +29,40 @@ export default async function Requests(props: PageProps<"/requests">) {
   const sp = await props.searchParams;
   const status = typeof sp.status === "string" ? sp.status : "new";
   const db = getDb();
-  const [rows, s] = await Promise.all([listTrialRequests(db, status === "all" ? undefined : status), getSettings(db)]);
+  const [rows, s, help] = await Promise.all([listTrialRequests(db, status === "all" ? undefined : status), getSettings(db), listPasswordHelp(db)]);
   const tabs: [string, string][] = [...REQUEST_STATUSES.map((v) => [v, STATUS[v][0]] as [string, string]), ["all", "الكل"]];
 
   return (
     <div>
-      <PageHeader title="طلبات الحصص التجريبية" subtitle="اللي الزوار بعتوه من فورم الصفحة الرئيسية" />
+      <PageHeader title="الطلبات" subtitle="طلبات الحصص التجريبية من الصفحة الرئيسية، وطلبات نسيت كلمة السر" />
+      {help.length > 0 && (
+        <section className="card mb-6 border-accent/40">
+          <h2 className="mb-1 font-bold">طلبات «نسيت كلمة السر» ({help.length})</h2>
+          <p className="mb-3 text-sm text-slate-500">افتح صفحة الشخص واضغط «كلمة سر جديدة»، وابعتها له على الواتساب. بعدها علّم الطلب إنه اتعمل.</p>
+          <ul className="divide-y divide-slate-100 text-sm">
+            {help.map((h) => (
+              <li key={h.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
+                <div>
+                  <span className="ltr font-semibold">{h.email}</span>
+                  <span className="text-slate-500">
+                    {" · "}
+                    {h.userName ? h.userName : "الإيميل ده ملوش حساب"}
+                    {" · "}
+                    {fmtDateTime(h.createdAt, s.academyTimezone)}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  {h.page && <Link className="link" href={h.page}>صفحة الشخص</Link>}
+                  <form action={passwordHandledAction}>
+                    <input type="hidden" name="id" value={h.id} />
+                    <button className="btn-outline btn-sm">اتعمل ✓</button>
+                  </form>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       <div className="mb-4 flex flex-wrap gap-2">
         {tabs.map(([v, l]) => (
           <Link key={v} href={`/requests?status=${v}`} className={v === status ? "btn btn-sm" : "btn-outline btn-sm"}>

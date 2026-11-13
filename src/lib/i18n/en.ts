@@ -11,6 +11,13 @@ const en: Dict = {
   loginButton: "Sign in",
   passwordChanged: "Your password was changed. Sign in with the new one.",
   wrongLogin: "Wrong email or password",
+  forgotLink: "Forgot your password?",
+  forgotTitle: "Forgot your password",
+  forgotText: "Enter the email you sign in with, and the academy will send you a new temporary password by WhatsApp or email as soon as possible.",
+  forgotSend: "Send request",
+  forgotDone: "We have your request. If this email has an account with us, we will send you a new password soon.",
+  backToLogin: "Back to sign in",
+  invalidEmail: "Please enter a valid email",
 
   save: "Save",
   pending: "One moment…",

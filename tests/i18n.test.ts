@@ -81,3 +81,17 @@ describe("trial form text", () => {
     }
   });
 });
+
+describe("prices and FAQ text", () => {
+  it("is complete in every language, with the right placeholders", () => {
+    for (const code of LANG_CODES) {
+      const m = LANDING_MORE[code];
+      expect(m.pricing.lessons, code).toContain("{n}");
+      expect(m.pricing.minutes, code).toContain("{m}");
+      expect(m.pricing.perLesson, code).toContain("{p}");
+      expect(m.faq, code).toHaveLength(7);
+      expect(m.faq[4][1], code).toContain("{h}");
+      for (const [q, a] of m.faq) expect(q && a, code).toBeTruthy();
+    }
+  });
+});

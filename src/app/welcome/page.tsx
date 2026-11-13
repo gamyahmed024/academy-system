@@ -10,6 +10,8 @@ import { LangSwitch } from "@/components/lang-switch";
 import { Vowelled, WordTry } from "@/components/word-try";
 import { TrialForm } from "@/components/trial-form";
 import { requestTrial } from "./actions";
+import { listPricePlans } from "@/server/services/requests";
+import { LANGS } from "@/lib/i18n";
 import Image from "next/image";
 
 export async function generateMetadata() {
@@ -39,6 +41,10 @@ export default async function Welcome() {
   const m = LANDING_MORE[lang];
   const words = DEMO_WORDS.map((w, i) => ({ ...w, meaning: m.meanings[i] }));
   const wa = waLink(s.contactWhatsapp);
+  const plans = await listPricePlans(getDb());
+  const money = (v: number, currency: string) =>
+    new Intl.NumberFormat(LANGS[lang].dateLocale, { style: "currency", currency, maximumFractionDigits: v % 1 ? 2 : 0 }).format(v);
+  const fill = (text: string, vars: Record<string, string | number>) => text.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ""));
   const year = new Date().getFullYear();
 
   const contactBtn = (cls: string) =>
@@ -190,6 +196,57 @@ export default async function Welcome() {
         <div className="reveal mx-auto max-w-3xl px-4 py-24 text-center">
           <h2 className="text-2xl font-extrabold sm:text-4xl">{m.cultureTitle}</h2>
           <p className="mt-4 text-lg leading-8 text-white/90">{m.cultureText}</p>
+        </div>
+      </section>
+
+      {plans.length > 0 && (
+        <section id="prices" className="mx-auto max-w-6xl px-4 py-20">
+          <div className="reveal text-center">
+            <h2 className="text-2xl font-extrabold text-brand sm:text-3xl">{m.pricing.title}</h2>
+            <p className="mt-3 text-lg text-slate-600">{m.pricing.text}</p>
+          </div>
+          <div className="mt-10 flex flex-wrap justify-center gap-6">
+            {plans.map((p) => {
+              const price = Number(p.price);
+              return (
+                <div
+                  key={p.id}
+                  className={`reveal lift relative flex w-full max-w-xs flex-col rounded-3xl border bg-white p-7 text-center shadow-sm ${p.featured ? "border-2 border-accent" : "border-slate-200/70"}`}
+                >
+                  {p.featured && (
+                    <span className="absolute -top-3.5 start-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-sm font-bold whitespace-nowrap text-white rtl:translate-x-1/2">
+                      {m.pricing.popular}
+                    </span>
+                  )}
+                  <div className="text-xl font-extrabold text-sidebar">{fill(m.pricing.lessons, { n: p.lessonsPerMonth })}</div>
+                  <div className="mt-1 text-slate-500">{fill(m.pricing.minutes, { m: p.minutes })}</div>
+                  <div className="mt-5 text-4xl font-extrabold text-brand">{money(price, p.currency)}</div>
+                  <div className="text-sm text-slate-500">{m.pricing.perMonth}</div>
+                  <div className="mt-2 text-sm font-semibold text-accent">{fill(m.pricing.perLesson, { p: money(price / p.lessonsPerMonth, p.currency) })}</div>
+                  <a href="#trial" className={`mt-6 rounded-xl px-5 py-3 font-bold transition ${p.featured ? "bg-accent text-white hover:brightness-110" : "border-2 border-brand text-brand hover:bg-brand-soft"}`}>
+                    {m.pricing.choose}
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      <section className="bg-sand/60">
+        <div className="mx-auto max-w-3xl px-4 py-20">
+          <h2 className="reveal mb-8 text-center text-2xl font-extrabold text-brand sm:text-3xl">{m.faqTitle}</h2>
+          <div className="space-y-3">
+            {m.faq.map(([q, a]) => (
+              <details key={q} className="reveal group rounded-2xl border border-slate-200/70 bg-white px-5 shadow-sm open:shadow-md">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-bold [&::-webkit-details-marker]:hidden">
+                  {q}
+                  <span aria-hidden className="text-2xl leading-none text-brand transition group-open:rotate-45">+</span>
+                </summary>
+                <p className="pb-5 leading-7 text-slate-600">{a.replace("{h}", String(s.freeCancelHours))}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 

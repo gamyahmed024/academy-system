@@ -303,3 +303,26 @@ export const trialRequests = pgTable(
   },
   (t) => [index("trial_requests_status_idx").on(t.status, t.createdAt), index("trial_requests_email_idx").on(t.email, t.createdAt)],
 );
+
+/** "Forgot password": the person asks the academy for a new temporary password. */
+export const passwordHelpRequests = pgTable("password_help_requests", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull(),
+  /** The account with that email, when there is one. */
+  userId: integer("user_id").references(() => users.id),
+  lang: text("lang").notNull(),
+  handled: boolean("handled").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, (t) => [index("password_help_email_idx").on(t.email, t.createdAt)]);
+
+/** Packages shown to visitors on the welcome page. Labels are built per language from the numbers. */
+export const pricePlans = pgTable("price_plans", {
+  id: serial("id").primaryKey(),
+  lessonsPerMonth: integer("lessons_per_month").notNull(),
+  minutes: integer("minutes").notNull(),
+  price: numeric("price", { precision: 12, scale: 2 }).notNull(),
+  currency: text("currency").notNull(),
+  featured: boolean("featured").notNull().default(false),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});

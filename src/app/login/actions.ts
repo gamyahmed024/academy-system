@@ -7,7 +7,8 @@ import { verifyLogin, startSession, endSession } from "@/server/services/auth";
 import { SESSION_COOKIE, homeFor } from "@/server/session";
 import { str, type ActionState } from "@/server/action";
 import { getLang } from "@/server/lang";
-import { isLang, translateError, LANG_COOKIE } from "@/lib/i18n";
+import { isLang, translateError, translator, LANG_COOKIE } from "@/lib/i18n";
+import { createPasswordHelp } from "@/server/services/requests";
 
 export async function login(_: ActionState, form: FormData): Promise<ActionState> {
   const db = getDb();
@@ -35,4 +36,17 @@ export async function logout() {
   if (token) await endSession(getDb(), token);
   jar.delete(SESSION_COOKIE);
   redirect("/login");
+}
+
+/** Ask the academy for a new password; the answer is the same whether or not the email has an account. */
+export async function forgotPassword(_: ActionState, form: FormData): Promise<ActionState> {
+  const lang = await getLang();
+  const t = translator(lang);
+  try {
+    const problem = await createPasswordHelp(getDb(), str(form, "email"), lang);
+    return problem ? { error: t("invalidEmail") } : { ok: t("forgotDone") };
+  } catch (e) {
+    console.error(e);
+    return { error: t("unexpected") };
+  }
 }

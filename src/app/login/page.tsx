@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { redirect } from "next/navigation";
 import { getCurrentUser, homeFor } from "@/server/session";
@@ -40,6 +41,9 @@ export default async function LoginPage(props: PageProps<"/login">) {
             </label>
           </div>
         </ActionForm>
+        <Link href="/login/forgot" className="link mt-4 block text-center text-sm">
+          {t("forgotLink")}
+        </Link>
       </div>
       <LangSwitch current={lang} label={t("language")} className="text-white" />
     </main>

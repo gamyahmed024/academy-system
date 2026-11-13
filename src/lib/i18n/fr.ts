@@ -11,6 +11,13 @@ const fr: Dict = {
   loginButton: "Se connecter",
   passwordChanged: "Votre mot de passe a été modifié. Connectez-vous avec le nouveau.",
   wrongLogin: "E-mail ou mot de passe incorrect",
+  forgotLink: "Mot de passe oublié ?",
+  forgotTitle: "Mot de passe oublié",
+  forgotText: "Saisissez l'e-mail avec lequel vous vous connectez, et l'académie vous enverra un nouveau mot de passe temporaire par WhatsApp ou e-mail dès que possible.",
+  forgotSend: "Envoyer la demande",
+  forgotDone: "Nous avons reçu votre demande. Si cet e-mail correspond à un compte chez nous, nous vous enverrons bientôt un nouveau mot de passe.",
+  backToLogin: "Retour à la connexion",
+  invalidEmail: "Veuillez saisir un e-mail valide",
 
   save: "Enregistrer",
   pending: "Un instant…",

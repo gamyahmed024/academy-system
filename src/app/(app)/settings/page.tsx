@@ -5,15 +5,18 @@ import { requireAdmin } from "@/server/session";
 import { getSettings } from "@/server/services/money";
 import { ActionForm } from "@/components/action-form";
 import { PageHeader, Field, Badge } from "@/components/ui";
-import { settingsAction, addStaffAction, changePasswordAction } from "./actions";
+import { settingsAction, addStaffAction, changePasswordAction, addPlanAction, removePlanAction } from "./actions";
+import { listPricePlans } from "@/server/services/requests";
+import { CURRENCIES, fmtMoney } from "@/lib/domain/rules";
 
 export const metadata = { title: "الإعدادات" };
 
 export default async function Settings() {
   await requireAdmin();
   const db = getDb();
-  const [s, staff] = await Promise.all([
+  const [s, plans, staff] = await Promise.all([
     getSettings(db),
+    listPricePlans(db),
     db.select({ id: users.id, name: users.name, email: users.email, role: users.role }).from(users).where(inArray(users.role, ["admin", "staff"])).orderBy(asc(users.id)),
   ]);
   return (
@@ -33,6 +36,40 @@ export default async function Settings() {
             </Field>
             <Field label="نبّهني لما رصيد الطالب يوصل لـ"><input name="lowBalanceThreshold" type="number" min={0} max={10} defaultValue={s.lowBalanceThreshold} className="input" /></Field>
             <Field label="واتساب الأكاديمية" hint="بكود الدولة، مثلًا +201001234567. بيظهر كزرار تواصل في الصفحة الرئيسية للزوار، ولو سبته فاضي الزرار مش هيظهر."><input name="contactWhatsapp" defaultValue={s.contactWhatsapp ?? ""} className="input ltr text-left" inputMode="tel" /></Field>
+          </div>
+        </ActionForm>
+      </section>
+
+      <section className="card">
+        <h2 className="mb-1 font-bold">الأسعار في الصفحة الرئيسية</h2>
+        <p className="mb-4 text-sm text-slate-500">كل باقة بتظهر للزوار بلغتهم (مثلًا «8 حصص في الشهر · 45 دقيقة»)، ومعاها سعر الحصة الواحدة. لو مفيش باقات، قسم الأسعار مش هيظهر.</p>
+        {plans.length > 0 && (
+          <ul className="mb-4 divide-y divide-slate-100 text-sm">
+            {plans.map((p) => (
+              <li key={p.id} className="flex items-center justify-between gap-2 py-2">
+                <span>
+                  {p.lessonsPerMonth} حصة في الشهر · {p.minutes} دقيقة · <b>{fmtMoney(p.price, p.currency)}</b>
+                  {p.featured && <Badge tone="accent">الأكثر طلبًا</Badge>}
+                </span>
+                <form action={removePlanAction}>
+                  <input type="hidden" name="id" value={p.id} />
+                  <button className="btn-danger btn-sm">شيلها</button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        )}
+        <ActionForm action={addPlanAction} submit="إضافة باقة" submitClass="btn-outline" resetOnSuccess>
+          <div className="grid gap-3 sm:grid-cols-5">
+            <Field label="حصص في الشهر"><input name="lessonsPerMonth" type="number" min={1} max={60} required className="input" /></Field>
+            <Field label="مدة الحصة (دقيقة)"><input name="minutes" type="number" min={15} max={240} step={5} defaultValue={45} required className="input" /></Field>
+            <Field label="السعر في الشهر"><input name="price" type="number" min={1} step="0.01" required className="input" /></Field>
+            <Field label="العملة">
+              <select name="currency" defaultValue="USD" className="input">{CURRENCIES.map((c) => <option key={c}>{c}</option>)}</select>
+            </Field>
+            <Field label="مميزة؟">
+              <select name="featured" defaultValue="0" className="input"><option value="0">لأ</option><option value="1">الأكثر طلبًا</option></select>
+            </Field>
           </div>
         </ActionForm>
       </section>

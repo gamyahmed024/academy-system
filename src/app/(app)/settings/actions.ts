@@ -7,6 +7,7 @@ import { updateSettings } from "@/server/services/money";
 import { createUser, changePassword, verifyLogin } from "@/server/services/auth";
 import { run, str, type ActionState } from "@/server/action";
 import { assert } from "@/server/services/errors";
+import { addPricePlan, removePricePlan } from "@/server/services/requests";
 
 export async function settingsAction(_: ActionState, f: FormData): Promise<ActionState> {
   const u = await requireAdmin();
@@ -51,4 +52,25 @@ export async function changePasswordAction(_: ActionState, f: FormData): Promise
     await changePassword(db, u.id, str(f, "next"));
     return "اتغيرت كلمة السر، سجّل دخول تاني";
   });
+}
+
+export async function addPlanAction(_: ActionState, f: FormData): Promise<ActionState> {
+  await requireAdmin();
+  const r = await run(() =>
+    addPricePlan(getDb(), {
+      lessonsPerMonth: Number(str(f, "lessonsPerMonth")),
+      minutes: Number(str(f, "minutes")),
+      price: Number(str(f, "price")),
+      currency: str(f, "currency"),
+      featured: str(f, "featured") === "1",
+    }),
+  );
+  revalidatePath("/", "layout");
+  return r;
+}
+
+export async function removePlanAction(f: FormData) {
+  await requireAdmin();
+  await removePricePlan(getDb(), Number(f.get("id")));
+  revalidatePath("/", "layout");
 }
