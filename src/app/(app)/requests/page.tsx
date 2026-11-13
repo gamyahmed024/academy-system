@@ -77,7 +77,7 @@ export default async function Requests(props: PageProps<"/requests">) {
           {rows.map((r) => {
             const langName = isLang(r.lang) ? LANGS[r.lang].langName : r.lang;
             const wa = whatsappLink(r.whatsapp, `السلام عليكم ${r.name}، معاك ${s.academyName} بخصوص طلب الحصة التجريبية.`);
-            const newStudent = `/students/new?${new URLSearchParams({ name: r.name, email: r.email, phone: r.whatsapp ?? "", country: r.country ?? "", timezone: r.timezone ?? "" })}`;
+            const newStudent = `/students/new?${new URLSearchParams({ request: String(r.id), name: r.name, email: r.email, phone: r.whatsapp ?? "", country: r.country ?? "", timezone: r.timezone ?? "" })}`;
             return (
               <div key={r.id} className="card">
                 <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
@@ -113,7 +113,11 @@ export default async function Requests(props: PageProps<"/requests">) {
                     <input name="staffNote" defaultValue={r.staffNote ?? ""} placeholder="ملاحظة (مثلًا: الحصة يوم السبت 6 مساءً)" className="input" />
                   </div>
                 </ActionForm>
-                <Link href={newStudent} className="link mt-2 inline-block text-sm">+ اعمله ملف طالب</Link>
+                {r.studentId ? (
+                  <Link href={`/students/${r.studentId}`} className="link mt-2 inline-block text-sm">ملف الطالب ←</Link>
+                ) : (
+                  <Link href={newStudent} className="link mt-2 inline-block text-sm">+ اعمله ملف طالب</Link>
+                )}
               </div>
             );
           })}

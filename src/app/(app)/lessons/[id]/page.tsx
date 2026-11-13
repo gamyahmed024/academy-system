@@ -43,6 +43,7 @@ export default async function LessonPage(props: PageProps<"/lessons/[id]">) {
             <StatusBadge status={l.status} />
             {l.originalStartsAt && <Badge tone="accent">اتنقلت من {fmtDateTime(l.originalStartsAt, tz)}</Badge>}
             {l.series && <Badge tone="brand">من سلسلة متكررة</Badge>}
+            {l.free && <Badge tone="accent">تجريبية مجانية: مش بتتخصم من الرصيد</Badge>}
           </span>
         }
         actions={

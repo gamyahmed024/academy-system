@@ -4,6 +4,7 @@ import { requirePortal } from "@/server/session";
 import { getDb } from "@/db";
 import { getSettings } from "@/server/services/money";
 import { getT } from "@/server/lang";
+import { nameFor } from "@/lib/academy-name";
 import { LangSwitch } from "@/components/lang-switch";
 import { logout } from "../login/actions";
 
@@ -19,7 +20,7 @@ export default async function PortalLayout({ children }: { children: React.React
         <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-3">
           <Link href="/my" className="flex items-center gap-2">
             <Logo size={38} />
-            <span className="font-extrabold text-white">{s.academyName}</span>
+            <span className="font-extrabold text-white">{nameFor(s, lang)}</span>
           </Link>
           <div className="flex flex-wrap items-center gap-4 text-sm">
             <span>

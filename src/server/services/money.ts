@@ -29,7 +29,7 @@ export async function getSettings(db: Conn) {
 
 export async function updateSettings(
   db: DB,
-  input: { academyName: string; freeCancelHours: number; payTeacherOnNoShow: boolean; lowBalanceThreshold: number; contactWhatsapp?: string | null },
+  input: { academyName: string; academyNameLatin?: string; freeCancelHours: number; payTeacherOnNoShow: boolean; lowBalanceThreshold: number; contactWhatsapp?: string | null },
   by: number | null,
 ) {
   assert(input.academyName.trim(), "اكتب اسم الأكاديمية");
@@ -39,7 +39,7 @@ export async function updateSettings(
   assert(!contactWhatsapp || contactWhatsapp.replace(/\D/g, "").length >= 8, "اكتب رقم الواتساب بكود الدولة");
   await db
     .update(settings)
-    .set({ ...input, academyName: input.academyName.trim(), ...(input.contactWhatsapp !== undefined ? { contactWhatsapp } : {}) })
+    .set({ ...input, academyName: input.academyName.trim(), ...(input.academyNameLatin?.trim() ? { academyNameLatin: input.academyNameLatin.trim() } : {}), ...(input.contactWhatsapp !== undefined ? { contactWhatsapp } : {}) })
     .where(eq(settings.id, 1));
   await audit(db, by, "update", "settings", 1, input);
 }
@@ -68,7 +68,9 @@ export async function recordAttendance(
     );
 
     const policy = await getSettings(tx);
-    const d = decideAttendance(input.state, l.startsAt, input.noticeAt ?? null, policy);
+    const rule = decideAttendance(input.state, l.startsAt, input.noticeAt ?? null, policy);
+    // A free (trial) lesson never takes a credit; the teacher is paid as for any lesson.
+    const d = { ...rule, deducted: rule.deducted && !l.free };
     const [student] = await tx.select().from(students).where(eq(students.id, input.studentId));
 
     const [existing] = await tx
@@ -146,10 +148,13 @@ export async function recordPayment(
       const [s] = await tx.select().from(students).where(eq(students.id, input.studentId));
       assert(s, "الطالب مش موجود");
       walletId = s.walletId;
+      // The first payment after a trial makes the student active.
+      if (s.status === "trial") await tx.update(students).set({ status: "active" }).where(eq(students.id, s.id));
     } else {
       const [g] = await tx.select().from(guardians).where(eq(guardians.id, input.guardianId!));
       assert(g, "ولي الأمر مش موجود");
       walletId = g.walletId;
+      await tx.update(students).set({ status: "active" }).where(and(eq(students.guardianId, g.id), eq(students.status, "trial")));
     }
     const amountEgp = convertToEgp(input.amount, input.rateToEgp);
     const [{ n }] = await tx.select({ n: sql<number>`count(*)::int` }).from(payments);

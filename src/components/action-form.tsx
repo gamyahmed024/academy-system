@@ -50,7 +50,7 @@ export function ActionForm({ action, children, submit = "حفظ", submitClass = 
             {state.error}
           </p>
         )}
-        {state?.ok && !state.error && <p className="text-sm font-semibold text-green-700">✓ {state.ok}</p>}
+        {state?.ok && !state.error && <p className="text-sm font-semibold whitespace-pre-line text-green-700">✓ {state.ok}</p>}
       </div>
     </form>
   );

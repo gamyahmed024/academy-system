@@ -25,6 +25,7 @@ export default async function NewStudent(props: PageProps<"/students/new">) {
       <PageHeader title="طالب جديد" />
       <div className="card">
         <ActionForm action={createStudentAction} submit="إضافة الطالب">
+          {q("request") && <input type="hidden" name="requestId" value={q("request")} />}
           <StudentFields s={fromRequest} guardians={guardians} />
         </ActionForm>
       </div>

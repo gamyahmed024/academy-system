@@ -6,6 +6,7 @@ import { getDb } from "@/db";
 import { requireStaff } from "@/server/session";
 import { createStudent, updateStudent, type StudentInput } from "@/server/services/people";
 import { run, str, optStr, optId, type ActionState } from "@/server/action";
+import { linkRequestToStudent } from "@/server/services/requests";
 
 function read(f: FormData): StudentInput {
   return {
@@ -28,6 +29,8 @@ export async function createStudentAction(_: ActionState, f: FormData): Promise<
   let id = 0;
   const r = await run(async () => {
     id = (await createStudent(getDb(), read(f), u.id)).id;
+    const requestId = optId(f, "requestId");
+    if (requestId) await linkRequestToStudent(getDb(), requestId, id);
   });
   if (r?.error) return r;
   redirect(`/students/${id}`);

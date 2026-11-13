@@ -12,12 +12,13 @@ import { TrialForm } from "@/components/trial-form";
 import { requestTrial } from "./actions";
 import { listPricePlans } from "@/server/services/requests";
 import { LANGS } from "@/lib/i18n";
+import { nameFor } from "@/lib/academy-name";
 import Image from "next/image";
 
 export async function generateMetadata() {
   const { lang } = await getT();
   const s = await getSettings(getDb());
-  return { title: { absolute: s.academyName }, description: LANDING[lang].metaDesc };
+  return { title: { absolute: nameFor(s, lang) }, description: LANDING[lang].metaDesc };
 }
 
 /** Digits only, as wa.me wants them. */
@@ -60,7 +61,14 @@ export default async function Welcome() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <div className="flex min-w-0 items-center gap-2.5">
             <Logo size={42} />
-            <span className="truncate text-lg font-extrabold">{s.academyName}</span>
+            <span className="flex min-w-0 flex-col leading-tight">
+              <span className="truncate text-lg font-extrabold">{nameFor(s, lang)}</span>
+              {lang !== "ar" && (
+                <span lang="ar" className="truncate text-xs text-sky">
+                  {s.academyName}
+                </span>
+              )}
+            </span>
           </div>
           <div className="flex shrink-0 items-center gap-3">
             <LangSwitch current={lang} label={t("language")} />
@@ -270,7 +278,7 @@ export default async function Welcome() {
 
       <footer className="bg-sidebar px-4 py-6 text-center text-sm text-sidebar-text">
         <p>
-          © {year} {s.academyName} · {x.rights}
+          © {year} {nameFor(s, lang)} · {x.rights}
         </p>
         <details className="mx-auto mt-2 max-w-3xl text-xs opacity-80">
           <summary className="cursor-pointer">{m.credits}</summary>

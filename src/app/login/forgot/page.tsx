@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { nameFor } from "@/lib/academy-name";
 import { getDb } from "@/db";
 import { getSettings } from "@/server/services/money";
 import { getT } from "@/server/lang";
@@ -34,7 +35,7 @@ export default async function ForgotPage() {
           {t("backToLogin")}
         </Link>
       </div>
-      <p className="text-sm text-white/70">{s.academyName}</p>
+      <p className="text-sm text-white/70">{nameFor(s, lang)}</p>
       <LangSwitch current={lang} label={t("language")} className="text-white" />
     </main>
   );

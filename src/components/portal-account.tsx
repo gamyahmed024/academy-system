@@ -3,6 +3,7 @@ import { portalAccount, type PortalKind } from "@/server/services/portal";
 import { createAccountAction, resetPasswordAction, toggleAccountAction } from "@/app/(app)/portal-actions";
 import { ActionForm } from "./action-form";
 import { Badge } from "./ui";
+import { LANGS, LANG_CODES } from "@/lib/i18n";
 
 const WHO: Record<PortalKind, string> = {
   teacher: "يشوف حصصه ويسجل الحضور ويتابع مستحقاته",
@@ -11,7 +12,7 @@ const WHO: Record<PortalKind, string> = {
 };
 
 /** Staff card on a teacher / student / guardian page to manage their login. */
-export async function PortalAccountCard({ kind, id, defaultEmail }: { kind: PortalKind; id: number; defaultEmail: string | null }) {
+export async function PortalAccountCard({ kind, id, defaultEmail, defaultLang = kind === "teacher" ? "ar" : "en" }: { kind: PortalKind; id: number; defaultEmail: string | null; defaultLang?: string }) {
   const acc = await portalAccount(getDb(), kind, id);
   return (
     <section className="card">
@@ -22,6 +23,12 @@ export async function PortalAccountCard({ kind, id, defaultEmail }: { kind: Port
           <label className="block">
             <span className="label">الإيميل اللي هيدخل بيه</span>
             <input name="email" type="email" required defaultValue={defaultEmail ?? ""} className="input ltr text-left" />
+          </label>
+          <label className="mt-3 block">
+            <span className="label">لغته (الصفحة ورسالة الدخول هيكونوا بيها)</span>
+            <select name="lang" defaultValue={defaultLang} className="input">
+              {LANG_CODES.map((c) => <option key={c} value={c}>{LANGS[c].langName}</option>)}
+            </select>
           </label>
           <p className="mt-2 text-xs text-slate-500">النظام هيعمل كلمة سر مؤقتة ويوريهالك مرة واحدة علشان تبعتها.</p>
         </ActionForm>
