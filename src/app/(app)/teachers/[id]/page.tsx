@@ -13,7 +13,9 @@ import { ActionForm } from "@/components/action-form";
 import { PortalAccountCard } from "@/components/portal-account";
 import { PageHeader, BackLink, Kpi, Empty, Badge, JoinButton } from "@/components/ui";
 import { TeacherFields } from "../teacher-form";
-import { updateTeacherAction, closeMonthAction, markPaidAction } from "../actions";
+import { updateTeacherAction, closeMonthAction, markPaidAction, deleteTeacherAction } from "../actions";
+import { teacherFootprint } from "@/server/services/cleanup";
+import { DeleteCard } from "@/components/delete-card";
 
 export const metadata = { title: "المدرس" };
 
@@ -106,6 +108,22 @@ export default async function TeacherPage(props: PageProps<"/teachers/[id]">) {
           <ActionForm action={updateTeacherAction.bind(null, t.id)}><TeacherFields t={t} /></ActionForm>
         </section>
       </div>
+      {isAdmin && <TeacherDelete id={t.id} name={t.name} />}
     </div>
+  );
+}
+
+async function TeacherDelete({ id, name }: { id: number; name: string }) {
+  const f = await teacherFootprint(getDb(), id);
+  return (
+    <DeleteCard
+      title="مسح المدرس نهائيًا"
+      action={deleteTeacherAction.bind(null, id)}
+      submit="مسح المدرس"
+      confirm={`متأكد إنك عايز تمسح «${name}» نهائيًا؟\nهيتمسح معاه: ${f.lessons} حصة، ${f.groups} مجموعة، مستحقاته، وحسابه على الموقع.\nالطلاب مش هيتمسحوا، وأي حصة اتخصمت من رصيدهم معاه هترجع لهم.\nمينفعش ترجّعه تاني.`}
+    >
+      <p>استخدمه للمدرسين اللي اتضافوا للتجربة أو بالغلط. هيتمسح معاه حصصه ومجموعاته ومستحقاته وحسابه على الموقع. الطلاب نفسهم مش بيتمسحوا.</p>
+      <p className="mt-1">لو مدرس حقيقي ومشي، الأحسن تغيّر حالته لـ«متوقف» تحت علشان حصصه القديمة وحساباته تفضل موجودة.</p>
+    </DeleteCard>
   );
 }

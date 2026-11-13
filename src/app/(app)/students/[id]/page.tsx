@@ -9,6 +9,9 @@ import { fmtDate, fmtTime, timezoneLabel } from "@/lib/domain/time";
 import { ATTENDANCE_LABELS, fmtMoney } from "@/lib/domain/rules";
 import { PortalAccountCard } from "@/components/portal-account";
 import { requestLangOf } from "@/server/services/requests";
+import { studentFootprint } from "@/server/services/cleanup";
+import { DeleteCard } from "@/components/delete-card";
+import { deleteStudentAction } from "../actions";
 import { PageHeader, BackLink, Kpi, Badge, Empty, StatusBadge, JoinButton, whatsappLink } from "@/components/ui";
 
 export const metadata = { title: "ملف الطالب" };
@@ -16,7 +19,7 @@ export const metadata = { title: "ملف الطالب" };
 const stateTone = { present: "green", late: "accent", absent: "red", excused: "blue", teacher_cancelled: "gray" } as const;
 
 export default async function StudentPage(props: PageProps<"/students/[id]">) {
-  await requireStaff();
+  const user = await requireStaff();
   const id = Number((await props.params).id);
   const db = getDb();
   const s = Number.isInteger(id) ? await getStudent(db, id) : null;
@@ -153,6 +156,22 @@ export default async function StudentPage(props: PageProps<"/students/[id]">) {
         <PortalAccountCard kind="student" id={s.id} defaultEmail={s.email} defaultLang={(await requestLangOf(getDb(), s.id)) ?? undefined} />
       </div>
       {s.notes && <div className="card mt-6 whitespace-pre-line text-sm"><b>ملاحظات:</b> {s.notes}</div>}
+      {user.role === "admin" && <StudentDelete id={s.id} name={s.name} inFamily={!!s.guardian} />}
     </div>
+  );
+}
+
+async function StudentDelete({ id, name, inFamily }: { id: number; name: string; inFamily: boolean }) {
+  const f = await studentFootprint(getDb(), id);
+  return (
+    <DeleteCard
+      title="مسح الطالب نهائيًا"
+      action={deleteStudentAction.bind(null, id)}
+      submit="مسح الطالب"
+      confirm={`متأكد إنك عايز تمسح «${name}» نهائيًا؟\nهيتمسح معاه: ${f.lessons} حصة، ${f.attendance} تسجيل حضور، ${f.payments} دفعة، وحسابه على الموقع.\nمينفعش ترجّعه تاني.`}
+    >
+      <p>استخدمه للطلاب اللي اتضافوا للتجربة أو بالغلط. هيتمسح معاه حصصه وحضوره ومدفوعاته{inFamily ? " (اللي اتسجلت باسمه، ورصيد العيلة الباقي يفضل زي ما هو)" : ""} وحسابه على الموقع.</p>
+      <p className="mt-1">لو طالب حقيقي ووقف، الأحسن تغيّر حالته لـ«متوقف» من «تعديل» علشان تاريخه يفضل موجود.</p>
+    </DeleteCard>
   );
 }

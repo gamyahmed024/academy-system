@@ -7,12 +7,14 @@ import { PageHeader, Empty, StatusBadge, Badge } from "@/components/ui";
 
 export const metadata = { title: "المدرسين" };
 
-export default async function Teachers() {
+export default async function Teachers(props: PageProps<"/teachers">) {
   await requireStaff();
+  const deleted = (await props.searchParams).deleted === "1";
   const rows = await listTeachers(getDb());
   return (
     <div>
       <PageHeader title="المدرسين" subtitle={`${rows.length} مدرس`} actions={<Link href="/teachers/new" className="btn">+ مدرس جديد</Link>} />
+      {deleted && <div role="status" className="mb-4 rounded-lg bg-green-50 p-3 text-sm font-semibold text-green-700">✓ اتمسح المدرس وكل حصصه.</div>}
       <div className="card overflow-x-auto !p-0">
         {rows.length === 0 ? <div className="p-5"><Empty>مفيش مدرسين لسه.</Empty></div> : (
           <table className="table">

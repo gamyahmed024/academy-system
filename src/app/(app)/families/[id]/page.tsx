@@ -10,12 +10,13 @@ import { ActionForm } from "@/components/action-form";
 import { PortalAccountCard } from "@/components/portal-account";
 import { PageHeader, BackLink, Kpi, Empty, StatusBadge } from "@/components/ui";
 import { GuardianFields } from "../guardian-form";
-import { updateGuardianAction } from "../actions";
+import { updateGuardianAction, deleteGuardianAction } from "../actions";
+import { DeleteCard } from "@/components/delete-card";
 
 export const metadata = { title: "العيلة" };
 
 export default async function FamilyPage(props: PageProps<"/families/[id]">) {
-  await requireStaff();
+  const user = await requireStaff();
   const id = Number((await props.params).id);
   const db = getDb();
   const g = Number.isInteger(id) ? await getGuardian(db, id) : null;
@@ -79,6 +80,16 @@ export default async function FamilyPage(props: PageProps<"/families/[id]">) {
           </ActionForm>
         </section>
       </div>
+      {user.role === "admin" && (
+        <DeleteCard
+          title="مسح العيلة نهائيًا"
+          action={deleteGuardianAction.bind(null, g.id)}
+          submit="مسح العيلة"
+          confirm={`متأكد إنك عايز تمسح عيلة «${g.name}» نهائيًا؟\nهيتمسح معاها ${g.children.length} طالب بكل حصصهم وحضورهم، و${pays.length} دفعة، وحساباتهم على الموقع.\nمينفعش ترجّعها تاني.`}
+        >
+          <p>هيتمسح ولي الأمر وكل أولاده المربوطين بالعيلة ({g.children.length})، بحصصهم وحضورهم ومدفوعات العيلة وحساباتهم على الموقع.</p>
+        </DeleteCard>
+      )}
     </div>
   );
 }

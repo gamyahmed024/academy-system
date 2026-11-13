@@ -17,7 +17,9 @@ import {
 /*
  * Data model for phase 1. Design rules (see the proposal, sections 8 and 13):
  *  - every instant is stored as timestamptz (UTC);
- *  - nothing is hard-deleted: people get a status, lessons get "cancelled";
+ *  - nothing is hard-deleted in normal use: people get a status, lessons get
+ *    "cancelled" (the admin can still delete test or mistaken records for good,
+ *    see server/services/cleanup.ts);
  *  - lesson credits live in a ledger (credit_entries) attached to a wallet that
  *    one student or a whole family shares;
  *  - every payment keeps the exchange rate of the day it was received.

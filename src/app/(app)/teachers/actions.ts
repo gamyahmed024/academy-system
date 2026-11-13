@@ -8,6 +8,7 @@ import { createTeacher, updateTeacher, type TeacherInput } from "@/server/servic
 import { closeTeacherMonth, markPayoutPaid } from "@/server/services/money";
 import { run, str, optStr, type ActionState } from "@/server/action";
 import { assert } from "@/server/services/errors";
+import { deleteTeacher } from "@/server/services/cleanup";
 
 const read = (f: FormData): TeacherInput => ({
   name: str(f, "name"),
@@ -59,4 +60,15 @@ export async function markPaidAction(teacherId: number, payoutId: number, _: Act
   });
   revalidatePath(`/teachers/${teacherId}`);
   return r;
+}
+
+export async function deleteTeacherAction(id: number, _: ActionState, f: FormData): Promise<ActionState> {
+  void f;
+  const u = await requireAdmin();
+  const r = await run(async () => {
+    await deleteTeacher(getDb(), id, u.id);
+  });
+  if (r?.error) return r;
+  revalidatePath("/", "layout");
+  redirect("/teachers?deleted=1");
 }

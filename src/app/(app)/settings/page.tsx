@@ -5,7 +5,8 @@ import { requireAdmin } from "@/server/session";
 import { getSettings } from "@/server/services/money";
 import { ActionForm } from "@/components/action-form";
 import { PageHeader, Field, Badge } from "@/components/ui";
-import { settingsAction, addStaffAction, changePasswordAction, addPlanAction, removePlanAction } from "./actions";
+import { settingsAction, addStaffAction, changePasswordAction, addPlanAction, removePlanAction, wipeTrialDataAction } from "./actions";
+import { WIPE_CONFIRM_WORD } from "@/server/services/cleanup";
 import { listPricePlans } from "@/server/services/requests";
 import { CURRENCIES, fmtMoney } from "@/lib/domain/rules";
 
@@ -107,6 +108,26 @@ export default async function Settings() {
             <Field label="الجديدة"><input name="next" type="password" required minLength={8} className="input" /></Field>
             <Field label="تأكيد الجديدة"><input name="confirm" type="password" required className="input" /></Field>
           </div>
+        </ActionForm>
+      </section>
+
+      <section className="card border-red-200">
+        <h2 className="mb-1 font-bold text-red-700">مسح كل بيانات التجربة</h2>
+        <p className="mb-2 text-sm text-slate-600">
+          لما تخلّص تجربة وعايز تبدأ بالطلاب الحقيقيين: الزرار ده بيمسح <b>كل</b> الطلاب والعائلات والمدرسين والحصص والحضور والمدفوعات ومستحقات المدرسين وطلبات الحصص التجريبية، وحسابات الطلاب والمدرسين وأولياء الأمور على الموقع.
+        </p>
+        <p className="mb-4 text-sm text-slate-600">اللي بيفضل: حسابات الإدارة والسكرتارية، والإعدادات اللي فوق، وباقات الأسعار. مينفعش ترجّع اللي اتمسح.</p>
+        <ActionForm
+          action={wipeTrialDataAction}
+          submit="امسح كل بيانات التجربة"
+          submitClass="btn-danger"
+          confirm="آخر تأكيد: كل الطلاب والمدرسين والحصص والمدفوعات هتتمسح نهائيًا. متأكد؟"
+          pendingLabel="بيتمسح…"
+          resetOnSuccess
+        >
+          <Field label={`علشان تأكد، اكتب كلمة «${WIPE_CONFIRM_WORD}» هنا`}>
+            <input name="confirmWord" required autoComplete="off" className="input max-w-xs" />
+          </Field>
         </ActionForm>
       </section>
     </div>
