@@ -20,6 +20,20 @@ export type LandingMore = {
   credits: string;
   /** The free-trial request form */
   trial: TrialText;
+  /** {n} lessons, {m} minutes, {p} formatted price */
+  pricing: {
+    title: string;
+    text: string;
+    lessons: string;
+    minutes: string;
+    perMonth: string;
+    perLesson: string;
+    popular: string;
+    choose: string;
+  };
+  faqTitle: string;
+  /** {h} = hours of free cancellation */
+  faq: [string, string][];
 };
 
 export type TrialText = {
@@ -92,6 +106,47 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
     cultureText:
       "مع كل حصة تقترب أكثر من لغة يتكلمها مئات الملايين، ومن خطّها وعمارتها وآدابها.",
     credits: "مصادر الصور",
+    pricing: {
+      title: "الأسعار",
+      text: "باقات شهرية واضحة، وأول حصة مجانية.",
+      lessons: "{n} حصة في الشهر",
+      minutes: "{m} دقيقة للحصة",
+      perMonth: "شهريًا",
+      perLesson: "{p} للحصة",
+      popular: "الأكثر طلبًا",
+      choose: "ابدأ بحصة مجانية",
+    },
+    faqTitle: "أسئلة شائعة",
+    faq: [
+      [
+        "كيف تتم الحصص؟",
+        "الحصص مباشرة أونلاين على Google Meet أو Zoom. من صفحتك الخاصة تضغط زرًا واحدًا فتدخل حصتك.",
+      ],
+      [
+        "ماذا أحتاج لأبدأ؟",
+        "كمبيوتر أو تابلت أو موبايل واتصال بالإنترنت، ويُفضَّل استخدام سماعات.",
+      ],
+      [
+        "هل الحصة التجريبية مجانية فعلًا؟",
+        "نعم، أول حصة مجانية وبلا أي التزام. نتعرف فيها على مستواك وهدفك ونقترح عليك الخطة المناسبة.",
+      ],
+      [
+        "كيف تُحدَّد المواعيد؟",
+        "تختار أيامًا وساعات ثابتة تناسبك، وتظهر لك دائمًا بتوقيت بلدك، ولا تتغير مع التوقيت الصيفي.",
+      ],
+      [
+        "هل يمكنني الاعتذار عن حصة؟",
+        "نعم. إذا اعتذرت قبل الحصة بـ {h} ساعة أو أكثر فلن تُخصم من رصيدك.",
+      ],
+      [
+        "هل تُدرِّسون الأطفال؟",
+        "نعم. وليّ الأمر يحصل على حساب واحد يتابع منه حصص أبنائه وحضورهم ورصيد العائلة.",
+      ],
+      [
+        "كيف أدفع؟",
+        "نتفق معك على طريقة الدفع المناسبة لك، ونقبل الدفع بأكثر من عملة.",
+      ],
+    ],
     trial: {
       cta: "احجز حصة تجريبية مجانية",
       title: "احجز حصتك التجريبية المجانية",
@@ -158,6 +213,47 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
     cultureText:
       "Every lesson brings you closer to a language spoken by hundreds of millions, and to its calligraphy, architecture and literature.",
     credits: "Photo credits",
+    pricing: {
+      title: "Prices",
+      text: "Clear monthly packages, and your first lesson is free.",
+      lessons: "{n} lessons a month",
+      minutes: "{m} minutes per lesson",
+      perMonth: "per month",
+      perLesson: "{p} per lesson",
+      popular: "Most popular",
+      choose: "Start with a free lesson",
+    },
+    faqTitle: "Frequently asked questions",
+    faq: [
+      [
+        "How do the lessons work?",
+        "Lessons are live online on Google Meet or Zoom. From your personal page, one button takes you into your lesson.",
+      ],
+      [
+        "What do I need to start?",
+        "A computer, tablet or phone with an internet connection. Headphones help.",
+      ],
+      [
+        "Is the trial lesson really free?",
+        "Yes. Your first lesson is free with no commitment. We get to know your level and goal and suggest the right plan.",
+      ],
+      [
+        "How are lesson times set?",
+        "You choose fixed days and hours that suit you. They always show in your own time zone and don't shift when the clocks change.",
+      ],
+      [
+        "Can I cancel a lesson?",
+        "Yes. Cancel {h} hours or more before the lesson and it is not taken from your balance.",
+      ],
+      [
+        "Do you teach children?",
+        "Yes. A parent gets one account to follow their children's lessons, attendance and the family balance.",
+      ],
+      [
+        "How do I pay?",
+        "We agree with you on a payment method that suits you, and we accept several currencies.",
+      ],
+    ],
     trial: {
       cta: "Book a free trial lesson",
       title: "Book your free trial lesson",
@@ -230,6 +326,47 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
     cultureText:
       "Chaque cours vous rapproche d'une langue parlée par des centaines de millions de personnes, de sa calligraphie, de son architecture et de sa littérature.",
     credits: "Crédits photo",
+    pricing: {
+      title: "Tarifs",
+      text: "Des forfaits mensuels clairs, et votre premier cours est gratuit.",
+      lessons: "{n} cours par mois",
+      minutes: "{m} minutes par cours",
+      perMonth: "par mois",
+      perLesson: "{p} par cours",
+      popular: "Le plus choisi",
+      choose: "Commencer par un cours gratuit",
+    },
+    faqTitle: "Questions fréquentes",
+    faq: [
+      [
+        "Comment se passent les cours ?",
+        "Les cours ont lieu en direct en ligne sur Google Meet ou Zoom. Depuis votre page personnelle, un seul bouton vous fait entrer dans le cours.",
+      ],
+      [
+        "De quoi ai-je besoin pour commencer ?",
+        "Un ordinateur, une tablette ou un téléphone avec une connexion internet. Un casque est conseillé.",
+      ],
+      [
+        "Le cours d'essai est-il vraiment gratuit ?",
+        "Oui. Votre premier cours est gratuit et sans engagement. Nous découvrons votre niveau et votre objectif et vous proposons le bon programme.",
+      ],
+      [
+        "Comment les horaires sont-ils fixés ?",
+        "Vous choisissez des jours et des heures fixes qui vous conviennent. Ils s'affichent toujours dans votre fuseau horaire et ne bougent pas au changement d'heure.",
+      ],
+      [
+        "Puis-je annuler un cours ?",
+        "Oui. Annulez {h} heures ou plus avant le cours et il n'est pas déduit de votre solde.",
+      ],
+      [
+        "Enseignez-vous aux enfants ?",
+        "Oui. Un parent dispose d'un compte unique pour suivre les cours de ses enfants, leur présence et le solde de la famille.",
+      ],
+      [
+        "Comment payer ?",
+        "Nous convenons avec vous d'un moyen de paiement qui vous convient, et nous acceptons plusieurs devises.",
+      ],
+    ],
     trial: {
       cta: "Réserver un cours d'essai gratuit",
       title: "Réservez votre cours d'essai gratuit",
@@ -306,6 +443,47 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
     cultureText:
       "Jede Stunde bringt Sie einer Sprache näher, die Hunderte Millionen Menschen sprechen, und ihrer Kalligrafie, Architektur und Literatur.",
     credits: "Bildnachweise",
+    pricing: {
+      title: "Preise",
+      text: "Klare Monatspakete, und Ihre erste Stunde ist kostenlos.",
+      lessons: "{n} Stunden im Monat",
+      minutes: "{m} Minuten pro Stunde",
+      perMonth: "pro Monat",
+      perLesson: "{p} pro Stunde",
+      popular: "Am beliebtesten",
+      choose: "Mit einer kostenlosen Stunde beginnen",
+    },
+    faqTitle: "Häufige Fragen",
+    faq: [
+      [
+        "Wie laufen die Stunden ab?",
+        "Die Stunden finden live online über Google Meet oder Zoom statt. Auf Ihrer persönlichen Seite bringt Sie ein Knopf direkt in die Stunde.",
+      ],
+      [
+        "Was brauche ich zum Start?",
+        "Einen Computer, ein Tablet oder ein Handy mit Internetverbindung. Kopfhörer sind hilfreich.",
+      ],
+      [
+        "Ist die Probestunde wirklich kostenlos?",
+        "Ja. Ihre erste Stunde ist kostenlos und unverbindlich. Wir lernen Ihr Niveau und Ihr Ziel kennen und schlagen den passenden Plan vor.",
+      ],
+      [
+        "Wie werden die Termine festgelegt?",
+        "Sie wählen feste Tage und Uhrzeiten, die Ihnen passen. Sie werden immer in Ihrer Zeitzone angezeigt und verschieben sich nicht bei der Zeitumstellung.",
+      ],
+      [
+        "Kann ich eine Stunde absagen?",
+        "Ja. Wenn Sie {h} Stunden oder mehr vorher absagen, wird sie nicht von Ihrem Guthaben abgezogen.",
+      ],
+      [
+        "Unterrichten Sie auch Kinder?",
+        "Ja. Ein Elternteil bekommt ein Konto, über das es die Stunden, die Anwesenheit und das Familienguthaben aller Kinder verfolgt.",
+      ],
+      [
+        "Wie bezahle ich?",
+        "Wir vereinbaren mit Ihnen eine Zahlungsart, die Ihnen passt, und akzeptieren mehrere Währungen.",
+      ],
+    ],
     trial: {
       cta: "Kostenlose Probestunde buchen",
       title: "Buchen Sie Ihre kostenlose Probestunde",
@@ -375,6 +553,47 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
     cultureText:
       "Cada clase te acerca a una lengua que hablan cientos de millones de personas, y a su caligrafía, su arquitectura y su literatura.",
     credits: "Créditos de las fotos",
+    pricing: {
+      title: "Precios",
+      text: "Paquetes mensuales claros, y tu primera clase es gratis.",
+      lessons: "{n} clases al mes",
+      minutes: "{m} minutos por clase",
+      perMonth: "al mes",
+      perLesson: "{p} por clase",
+      popular: "El más elegido",
+      choose: "Empieza con una clase gratis",
+    },
+    faqTitle: "Preguntas frecuentes",
+    faq: [
+      [
+        "¿Cómo son las clases?",
+        "Las clases son en directo por internet en Google Meet o Zoom. Desde tu página personal, un solo botón te lleva a tu clase.",
+      ],
+      [
+        "¿Qué necesito para empezar?",
+        "Un ordenador, una tableta o un móvil con conexión a internet. Los auriculares ayudan.",
+      ],
+      [
+        "¿La clase de prueba es de verdad gratis?",
+        "Sí. Tu primera clase es gratis y sin compromiso. Conocemos tu nivel y tu objetivo y te proponemos el plan adecuado.",
+      ],
+      [
+        "¿Cómo se fijan los horarios?",
+        "Eliges días y horas fijos que te vengan bien. Siempre se muestran en tu zona horaria y no cambian con el cambio de hora.",
+      ],
+      [
+        "¿Puedo cancelar una clase?",
+        "Sí. Si cancelas {h} horas o más antes de la clase, no se descuenta de tu saldo.",
+      ],
+      [
+        "¿Dan clases a niños?",
+        "Sí. El padre o la madre tiene una sola cuenta para seguir las clases de sus hijos, su asistencia y el saldo familiar.",
+      ],
+      [
+        "¿Cómo pago?",
+        "Acordamos contigo un método de pago que te convenga, y aceptamos varias monedas.",
+      ],
+    ],
     trial: {
       cta: "Reserva una clase de prueba gratis",
       title: "Reserva tu clase de prueba gratis",
@@ -445,6 +664,47 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
     cultureText:
       "Her ders sizi yüz milyonlarca insanın konuştuğu bir dile, onun hat sanatına, mimarisine ve edebiyatına biraz daha yaklaştırır.",
     credits: "Fotoğraf kaynakları",
+    pricing: {
+      title: "Fiyatlar",
+      text: "Net aylık paketler; ilk dersiniz ücretsiz.",
+      lessons: "Ayda {n} ders",
+      minutes: "Ders başına {m} dakika",
+      perMonth: "aylık",
+      perLesson: "Ders başına {p}",
+      popular: "En çok tercih edilen",
+      choose: "Ücretsiz bir dersle başlayın",
+    },
+    faqTitle: "Sık sorulan sorular",
+    faq: [
+      [
+        "Dersler nasıl yapılıyor?",
+        "Dersler Google Meet veya Zoom üzerinden canlı ve çevrim içi yapılır. Kişisel sayfanızdaki tek bir düğmeyle derse girersiniz.",
+      ],
+      [
+        "Başlamak için neye ihtiyacım var?",
+        "İnternet bağlantılı bir bilgisayar, tablet veya telefon. Kulaklık kullanmanız önerilir.",
+      ],
+      [
+        "Deneme dersi gerçekten ücretsiz mi?",
+        "Evet. İlk dersiniz ücretsiz ve hiçbir yükümlülük yok. Seviyenizi ve hedefinizi öğrenip size uygun planı öneririz.",
+      ],
+      [
+        "Ders saatleri nasıl belirleniyor?",
+        "Size uyan sabit gün ve saatleri seçersiniz. Saatler her zaman kendi saat diliminizde görünür ve saat değişikliğinde kaymaz.",
+      ],
+      [
+        "Bir dersi iptal edebilir miyim?",
+        "Evet. Dersten {h} saat veya daha önce iptal ederseniz bakiyenizden düşülmez.",
+      ],
+      [
+        "Çocuklara da ders veriyor musunuz?",
+        "Evet. Veli, tek bir hesaptan çocuklarının derslerini, devamını ve aile bakiyesini takip eder.",
+      ],
+      [
+        "Nasıl ödeme yaparım?",
+        "Size uygun ödeme yöntemini sizinle birlikte belirleriz; birden fazla para birimiyle ödeme kabul ediyoruz.",
+      ],
+    ],
     trial: {
       cta: "Ücretsiz deneme dersi al",
       title: "Ücretsiz deneme dersinizi ayırtın",
@@ -514,6 +774,47 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
     cultureText:
       "Каждый урок приближает вас к языку, на котором говорят сотни миллионов людей, к его каллиграфии, архитектуре и литературе.",
     credits: "Авторы фотографий",
+    pricing: {
+      title: "Цены",
+      text: "Понятные месячные пакеты, а первый урок бесплатный.",
+      lessons: "{n} уроков в месяц",
+      minutes: "{m} минут на урок",
+      perMonth: "в месяц",
+      perLesson: "{p} за урок",
+      popular: "Самый популярный",
+      choose: "Начать с бесплатного урока",
+    },
+    faqTitle: "Частые вопросы",
+    faq: [
+      [
+        "Как проходят уроки?",
+        "Уроки идут вживую онлайн в Google Meet или Zoom. На вашей личной странице одна кнопка открывает урок.",
+      ],
+      [
+        "Что нужно, чтобы начать?",
+        "Компьютер, планшет или телефон с интернетом. Наушники не помешают.",
+      ],
+      [
+        "Пробный урок правда бесплатный?",
+        "Да. Первый урок бесплатный и ни к чему не обязывает. Мы узнаём ваш уровень и цель и предлагаем подходящий план.",
+      ],
+      [
+        "Как назначается время уроков?",
+        "Вы выбираете постоянные дни и часы, которые вам удобны. Время всегда показывается в вашем часовом поясе и не сдвигается при переходе на летнее время.",
+      ],
+      [
+        "Можно ли отменить урок?",
+        "Да. Если отменить урок за {h} часов или раньше, он не списывается с баланса.",
+      ],
+      [
+        "Вы занимаетесь с детьми?",
+        "Да. У родителя один аккаунт, где видны уроки, посещаемость детей и баланс семьи.",
+      ],
+      [
+        "Как оплатить?",
+        "Мы договоримся с вами об удобном способе оплаты и принимаем оплату в нескольких валютах.",
+      ],
+    ],
     trial: {
       cta: "Записаться на бесплатный пробный урок",
       title: "Запишитесь на бесплатный пробный урок",

@@ -1,6 +1,7 @@
-import { and, count, desc, eq, gte, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, gte, sql } from "drizzle-orm";
 import type { DB } from "@/db";
-import { trialRequests } from "@/db/schema";
+import { trialRequests, passwordHelpRequests, pricePlans, users, students, teachers, guardians } from "@/db/schema";
+import { CURRENCIES } from "@/lib/domain/rules";
 import { isValidTimezone } from "@/lib/domain/time";
 import { assert } from "./errors";
 
@@ -69,9 +70,13 @@ export async function listTrialRequests(db: DB, status?: string) {
   return db.select().from(trialRequests).where(where).orderBy(desc(trialRequests.createdAt)).limit(300);
 }
 
+/** New trial requests plus open password requests: the number shown in the sidebar. */
 export async function countNewRequests(db: DB) {
-  const [{ n }] = await db.select({ n: count() }).from(trialRequests).where(eq(trialRequests.status, "new"));
-  return n;
+  const [[a], [b]] = await Promise.all([
+    db.select({ n: count() }).from(trialRequests).where(eq(trialRequests.status, "new")),
+    db.select({ n: count() }).from(passwordHelpRequests).where(eq(passwordHelpRequests.handled, false)),
+  ]);
+  return a.n + b.n;
 }
 
 export async function updateTrialRequest(db: DB, id: number, status: string, staffNote: string) {
@@ -82,4 +87,72 @@ export async function updateTrialRequest(db: DB, id: number, status: string, sta
     .where(eq(trialRequests.id, id))
     .returning({ id: trialRequests.id });
   assert(done.length === 1, "الطلب ده مش موجود");
+}
+
+/* ---------- "Forgot password" ---------- */
+
+/**
+ * Record that someone asked for a new password. The answer to the visitor never says
+ * whether the email has an account, so the form cannot be used to find out who studies here.
+ */
+export async function createPasswordHelp(db: DB, email: string, lang: string): Promise<"email" | null> {
+  const e = email.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return "email";
+  const [{ n }] = await db
+    .select({ n: count() })
+    .from(passwordHelpRequests)
+    .where(and(eq(passwordHelpRequests.email, e), gte(passwordHelpRequests.createdAt, sql`now() - interval '1 day'`)));
+  if (n >= DAILY_LIMIT) return null;
+  const [u] = await db.select({ id: users.id }).from(users).where(sql`lower(${users.email}) = ${e}`);
+  await db.insert(passwordHelpRequests).values({ email: e.slice(0, 200), userId: u?.id ?? null, lang: lang.slice(0, 5) });
+  return null;
+}
+
+/** Open password requests, with the person's page when the email belongs to an account. */
+export async function listPasswordHelp(db: DB) {
+  const rows = await db
+    .select({
+      id: passwordHelpRequests.id,
+      email: passwordHelpRequests.email,
+      lang: passwordHelpRequests.lang,
+      createdAt: passwordHelpRequests.createdAt,
+      userName: users.name,
+      role: users.role,
+      studentId: students.id,
+      teacherId: teachers.id,
+      guardianId: guardians.id,
+    })
+    .from(passwordHelpRequests)
+    .leftJoin(users, eq(users.id, passwordHelpRequests.userId))
+    .leftJoin(students, eq(students.userId, users.id))
+    .leftJoin(teachers, eq(teachers.userId, users.id))
+    .leftJoin(guardians, eq(guardians.userId, users.id))
+    .where(eq(passwordHelpRequests.handled, false))
+    .orderBy(desc(passwordHelpRequests.createdAt));
+  return rows.map((r) => ({
+    ...r,
+    page: r.studentId ? `/students/${r.studentId}` : r.teacherId ? `/teachers/${r.teacherId}` : r.guardianId ? `/families/${r.guardianId}` : null,
+  }));
+}
+
+export async function markPasswordHelpHandled(db: DB, id: number) {
+  await db.update(passwordHelpRequests).set({ handled: true }).where(eq(passwordHelpRequests.id, id));
+}
+
+/* ---------- Prices shown to visitors ---------- */
+
+export async function listPricePlans(db: DB) {
+  return db.select().from(pricePlans).where(eq(pricePlans.active, true)).orderBy(asc(pricePlans.lessonsPerMonth), asc(pricePlans.id));
+}
+
+export async function addPricePlan(db: DB, i: { lessonsPerMonth: number; minutes: number; price: number; currency: string; featured: boolean }) {
+  assert(Number.isInteger(i.lessonsPerMonth) && i.lessonsPerMonth >= 1 && i.lessonsPerMonth <= 60, "عدد الحصص في الشهر لازم يكون من 1 لـ 60");
+  assert(Number.isInteger(i.minutes) && i.minutes >= 15 && i.minutes <= 240, "مدة الحصة لازم تكون من 15 لـ 240 دقيقة");
+  assert(Number.isFinite(i.price) && i.price > 0, "اكتب السعر");
+  assert((CURRENCIES as readonly string[]).includes(i.currency), "اختار العملة");
+  await db.insert(pricePlans).values({ ...i, price: i.price.toFixed(2) });
+}
+
+export async function removePricePlan(db: DB, id: number) {
+  await db.update(pricePlans).set({ active: false }).where(eq(pricePlans.id, id));
 }

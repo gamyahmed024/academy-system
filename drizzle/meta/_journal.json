@@ -29,6 +29,13 @@
       "when": 1794532500817,
       "tag": "0003_trial_requests",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794533145399,
+      "tag": "0004_help_and_prices",
+      "breakpoints": true
     }
   ]
 }

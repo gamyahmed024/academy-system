@@ -58,3 +58,37 @@ describe("trial requests", () => {
     await expect(updateTrialRequest(db, r.id, "lost", "")).rejects.toThrow();
   });
 });
+
+import { createUser } from "@/server/services/auth";
+import { createPasswordHelp, listPasswordHelp, markPasswordHelpHandled, addPricePlan, listPricePlans, removePricePlan } from "@/server/services/requests";
+
+describe("forgot password", () => {
+  it("records the request, links a known account, and answers the same for unknown emails", async () => {
+    await db.execute(sql`TRUNCATE password_help_requests RESTART IDENTITY`);
+    const u = await createUser(db, { name: "Omar Test", email: "known-student@example.com", password: "long-enough-pass", role: "student" });
+    expect(await createPasswordHelp(db, "Known-Student@example.com", "en")).toBeNull();
+    expect(await createPasswordHelp(db, "nobody@example.com", "de")).toBeNull();
+    expect(await createPasswordHelp(db, "not-an-email", "de")).toBe("email");
+    const open = await listPasswordHelp(db);
+    expect(open.map((r) => r.email).sort()).toEqual(["known-student@example.com", "nobody@example.com"]);
+    expect(open.find((r) => r.email.startsWith("known"))?.userName).toBe("Omar Test");
+    await markPasswordHelpHandled(db, open[0].id);
+    expect(await listPasswordHelp(db)).toHaveLength(1);
+    expect(u).toBeTruthy();
+  });
+});
+
+describe("price plans", () => {
+  it("adds, lists in order and hides plans", async () => {
+    await db.execute(sql`TRUNCATE price_plans RESTART IDENTITY`);
+    await addPricePlan(db, { lessonsPerMonth: 12, minutes: 45, price: 120, currency: "USD", featured: true });
+    await addPricePlan(db, { lessonsPerMonth: 8, minutes: 45, price: 85.5, currency: "EUR", featured: false });
+    await expect(addPricePlan(db, { lessonsPerMonth: 0, minutes: 45, price: 10, currency: "USD", featured: false })).rejects.toThrow();
+    await expect(addPricePlan(db, { lessonsPerMonth: 4, minutes: 45, price: 10, currency: "XYZ", featured: false })).rejects.toThrow();
+    const plans = await listPricePlans(db);
+    expect(plans.map((p) => p.lessonsPerMonth)).toEqual([8, 12]);
+    expect(plans[0].price).toBe("85.50");
+    await removePricePlan(db, plans[0].id);
+    expect(await listPricePlans(db)).toHaveLength(1);
+  });
+});

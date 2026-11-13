@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const items: { href: string; label: string; admin?: boolean }[] = [
   { href: "/", label: "الرئيسية" },
   { href: "/schedule", label: "الجدول" },
-  { href: "/requests", label: "طلبات تجريبية" },
+  { href: "/requests", label: "الطلبات" },
   { href: "/students", label: "الطلاب" },
   { href: "/families", label: "العائلات" },
   { href: "/teachers", label: "المدرسين" },

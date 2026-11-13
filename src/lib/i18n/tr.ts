@@ -11,6 +11,13 @@ const tr: Dict = {
   loginButton: "Giriş yap",
   passwordChanged: "Şifreniz değiştirildi. Yeni şifrenizle giriş yapın.",
   wrongLogin: "E-posta veya şifre hatalı",
+  forgotLink: "Şifreni mi unuttun?",
+  forgotTitle: "Şifremi unuttum",
+  forgotText: "Giriş yaptığın e-postayı yaz; akademi en kısa sürede WhatsApp veya e-posta ile yeni bir geçici şifre gönderecek.",
+  forgotSend: "Talebi gönder",
+  forgotDone: "Talebin bize ulaştı. Bu e-postaya ait bir hesap varsa yakında yeni bir şifre göndereceğiz.",
+  backToLogin: "Girişe dön",
+  invalidEmail: "Geçerli bir e-posta yaz",
 
   save: "Kaydet",
   pending: "Bir saniye…",
