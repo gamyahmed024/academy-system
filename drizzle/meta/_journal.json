@@ -22,6 +22,13 @@
       "when": 1794474199110,
       "tag": "0002_welcome_contact",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794532500817,
+      "tag": "0003_trial_requests",
+      "breakpoints": true
     }
   ]
 }
