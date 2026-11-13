@@ -8,6 +8,8 @@ import { LANDING_MORE, DEMO_WORDS } from "@/lib/i18n/landing-more";
 import { LANDING_PHOTOS as PHOTO } from "@/lib/landing-photos";
 import { LangSwitch } from "@/components/lang-switch";
 import { Vowelled, WordTry } from "@/components/word-try";
+import { TrialForm } from "@/components/trial-form";
+import { requestTrial } from "./actions";
 import Image from "next/image";
 
 export async function generateMetadata() {
@@ -56,7 +58,7 @@ export default async function Welcome() {
           </div>
           <div className="flex shrink-0 items-center gap-3">
             <LangSwitch current={lang} label={t("language")} />
-            <Link href="/login" className="hidden rounded-lg border border-white/40 px-3 py-1.5 text-sm font-bold hover:bg-white/10 sm:inline-block">
+            <Link href="/login" className="rounded-lg border border-white/40 px-3 py-1.5 text-sm font-bold whitespace-nowrap hover:bg-white/10">
               {x.signIn}
             </Link>
           </div>
@@ -73,10 +75,10 @@ export default async function Welcome() {
             <h1 className="max-w-3xl text-3xl leading-snug font-extrabold sm:text-5xl sm:leading-tight">{x.heroTitle}</h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-white/85">{x.heroText}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              {contactBtn("rounded-xl bg-accent px-6 py-3 font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:brightness-110")}
-              <Link href="/login" className="rounded-xl border-2 border-white/70 px-6 py-3 font-bold transition hover:bg-white/10">
-                {x.signIn}
-              </Link>
+              <a href="#trial" className="rounded-xl bg-accent px-6 py-3 font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:brightness-110">
+                {m.trial.cta}
+              </a>
+              {contactBtn("rounded-xl border-2 border-white/70 px-6 py-3 font-bold transition hover:bg-white/10")}
             </div>
           </div>
           <div className="relative mx-auto w-full max-w-md lg:max-w-none">
@@ -191,13 +193,18 @@ export default async function Welcome() {
         </div>
       </section>
 
-      <section className="bg-accent-soft">
-        <div className="reveal mx-auto max-w-3xl px-4 py-20 text-center">
-          <h2 className="text-2xl font-extrabold text-brand-dark sm:text-3xl">{x.ctaTitle}</h2>
-          {wa && <p className="mt-3 text-lg text-slate-700">{x.ctaText}</p>}
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            {contactBtn("rounded-xl bg-brand px-6 py-3 font-bold text-white shadow hover:bg-brand-dark")}
-            <Link href="/login" className="rounded-xl border-2 border-brand px-6 py-3 font-bold text-brand hover:bg-white">
+      <section id="trial" className="scroll-mt-20 bg-accent-soft">
+        <div className="mx-auto max-w-3xl px-4 py-20">
+          <div className="reveal text-center">
+            <h2 className="text-2xl font-extrabold text-brand-dark sm:text-3xl">{m.trial.title}</h2>
+            <p className="mx-auto mt-3 max-w-xl text-lg text-slate-700">{m.trial.text}</p>
+          </div>
+          <div className="reveal mt-8 rounded-3xl bg-white p-6 shadow-lg sm:p-8">
+            <TrialForm t={m.trial} action={requestTrial} />
+          </div>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            {contactBtn("rounded-xl border-2 border-brand px-5 py-2.5 font-bold text-brand hover:bg-white")}
+            <Link href="/login" className="rounded-xl px-5 py-2.5 font-bold text-brand underline-offset-4 hover:underline">
               {x.signIn}
             </Link>
           </div>

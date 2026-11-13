@@ -3,11 +3,12 @@ import { requireStaff } from "@/server/session";
 import { getDb } from "@/db";
 import { getSettings } from "@/server/services/money";
 import { Nav } from "@/components/nav";
+import { countNewRequests } from "@/server/services/requests";
 import { logout } from "../login/actions";
 
 export default async function AppLayout({ children }: LayoutProps<"/">) {
   const user = await requireStaff();
-  const s = await getSettings(getDb());
+  const [s, newRequests] = await Promise.all([getSettings(getDb()), countNewRequests(getDb())]);
   return (
     // staff pages are always Arabic, whatever language the browser picked
     <div lang="ar" dir="rtl" className="min-h-screen md:flex">
@@ -18,7 +19,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
             <span className="font-extrabold text-white">{s.academyName}</span>
           </div>
         </div>
-        <Nav isAdmin={user.role === "admin"} />
+        <Nav isAdmin={user.role === "admin"} newRequests={newRequests} />
         <div className="mt-4 border-t border-white/10 pt-4 text-sm text-sidebar-text md:absolute md:bottom-4 md:w-48">
           <div className="font-semibold text-white">{user.name}</div>
           <div className="text-xs">{user.role === "admin" ? "الإدارة" : "سكرتارية"}</div>

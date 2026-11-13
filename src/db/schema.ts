@@ -278,3 +278,28 @@ export const auditLog = pgTable("audit_log", {
   data: jsonb("data"),
   at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+/** A visitor's request for a free trial lesson, sent from the public welcome page. */
+export const requestStatusEnum = pgEnum("request_status", ["new", "contacted", "enrolled", "closed"]);
+
+export const trialRequests = pgTable(
+  "trial_requests",
+  {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    email: text("email").notNull(),
+    whatsapp: text("whatsapp"),
+    country: text("country"),
+    timezone: text("timezone"),
+    level: text("level").notNull(),
+    forWhom: text("for_whom").notNull(),
+    preferredTimes: text("preferred_times"),
+    message: text("message"),
+    /** The page language the visitor used, so staff can answer in it. */
+    lang: text("lang").notNull(),
+    status: requestStatusEnum("status").notNull().default("new"),
+    staffNote: text("staff_note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("trial_requests_status_idx").on(t.status, t.createdAt), index("trial_requests_email_idx").on(t.email, t.createdAt)],
+);

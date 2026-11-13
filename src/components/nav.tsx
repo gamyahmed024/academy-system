@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const items: { href: string; label: string; admin?: boolean }[] = [
   { href: "/", label: "الرئيسية" },
   { href: "/schedule", label: "الجدول" },
+  { href: "/requests", label: "طلبات تجريبية" },
   { href: "/students", label: "الطلاب" },
   { href: "/families", label: "العائلات" },
   { href: "/teachers", label: "المدرسين" },
@@ -15,7 +16,7 @@ const items: { href: string; label: string; admin?: boolean }[] = [
   { href: "/settings", label: "الإعدادات", admin: true },
 ];
 
-export function Nav({ isAdmin }: { isAdmin: boolean }) {
+export function Nav({ isAdmin, newRequests = 0 }: { isAdmin: boolean; newRequests?: number }) {
   const path = usePathname();
   return (
     <nav className="flex gap-1 overflow-x-auto md:flex-col md:overflow-visible">
@@ -32,6 +33,9 @@ export function Nav({ isAdmin }: { isAdmin: boolean }) {
               }`}
             >
               {i.label}
+              {i.href === "/requests" && newRequests > 0 && (
+                <span className="ms-2 rounded-full bg-accent px-1.5 py-0.5 text-xs font-bold text-white">{newRequests}</span>
+              )}
             </Link>
           );
         })}

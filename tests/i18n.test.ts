@@ -70,3 +70,14 @@ describe("welcome page extras", () => {
     }
   });
 });
+
+describe("trial form text", () => {
+  it("is complete in every language", () => {
+    for (const code of LANG_CODES) {
+      const t = LANDING_MORE[code].trial;
+      expect(t.levels, code).toHaveLength(4);
+      for (const [k, v] of Object.entries(t)) if (typeof v === "string") expect(v, `${code}.${k}`).toBeTruthy();
+      for (const v of Object.values(t.problems)) expect(v, code).toBeTruthy();
+    }
+  });
+});
