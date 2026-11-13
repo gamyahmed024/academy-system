@@ -108,6 +108,7 @@ export type StudentInput = {
   timezone: string;
   subject?: string | null;
   level?: string | null;
+  meetingUrl?: string | null;
   status?: "trial" | "active" | "paused" | "stopped";
   guardianId?: number | null;
   notes?: string | null;
@@ -115,6 +116,7 @@ export type StudentInput = {
 
 export async function createStudent(db: DB, input: StudentInput, by: number | null) {
   assert(input.name.trim(), "اكتب اسم الطالب");
+  checkMeetingUrl(input.meetingUrl);
   assert(isValidTimezone(input.timezone), "المنطقة الزمنية مش صحيحة");
   return db.transaction(async (tx) => {
     let walletId: number;
@@ -137,6 +139,7 @@ export async function createStudent(db: DB, input: StudentInput, by: number | nu
 
 export async function updateStudent(db: DB, id: number, input: StudentInput, by: number | null) {
   assert(input.name.trim(), "اكتب اسم الطالب");
+  checkMeetingUrl(input.meetingUrl);
   assert(isValidTimezone(input.timezone), "المنطقة الزمنية مش صحيحة");
   await db.transaction(async (tx) => {
     const [cur] = await tx.select().from(students).where(eq(students.id, id));

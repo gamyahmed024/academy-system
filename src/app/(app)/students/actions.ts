@@ -18,6 +18,7 @@ function read(f: FormData): StudentInput {
     timezone: str(f, "timezone"),
     subject: optStr(f, "subject"),
     level: optStr(f, "level"),
+    meetingUrl: optStr(f, "meetingUrl"),
     status: (str(f, "status") || "active") as StudentInput["status"],
     guardianId: optId(f, "guardianId"),
     notes: optStr(f, "notes"),

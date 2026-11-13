@@ -88,6 +88,8 @@ export const students = pgTable(
     timezone: text("timezone").notNull(),
     subject: text("subject"),
     level: text("level"),
+    // own meeting room for one-to-one lessons; overrides the teacher's room
+    meetingUrl: text("meeting_url"),
     status: personStatusEnum("status").notNull().default("active"),
     guardianId: integer("guardian_id").references(() => guardians.id),
     walletId: integer("wallet_id")
