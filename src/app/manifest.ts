@@ -4,10 +4,10 @@ import { getSettings } from "@/server/services/money";
 
 // Lets the system be installed as an icon on the desktop or phone (PWA).
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
-  const { academyName } = await getSettings(getDb());
+  const s = await getSettings(getDb());
   return {
-    name: academyName,
-    short_name: academyName,
+    name: `${s.academyNameLatin} · ${s.academyName}`,
+    short_name: s.academyNameLatin,
     description: "نظام إدارة أكاديمية تعليم الأجانب",
     start_url: "/",
     display: "standalone",

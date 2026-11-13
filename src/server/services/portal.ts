@@ -41,7 +41,7 @@ export async function createPortalAccount(
   db: DB,
   input: { kind: PortalKind; id: number; email: string; password?: string },
   by: number | null,
-): Promise<{ email: string; password: string }> {
+): Promise<{ email: string; password: string; name: string }> {
   const p = await person(db, input.kind, input.id);
   assert(!p.userId, "الشخص ده عنده حساب بالفعل");
   const email = input.email.trim().toLowerCase();
@@ -53,7 +53,7 @@ export async function createPortalAccount(
     const t = TABLES[input.kind];
     await tx.update(t).set({ userId: u.id }).where(eq(t.id, input.id));
     await audit(tx, by, "create", "portal_account", u.id, { kind: input.kind, personId: input.id, email });
-    return { email, password };
+    return { email, password, name: p.name };
   });
 }
 

@@ -119,7 +119,7 @@ async function checkTarget(db: Conn, t: Target) {
 
 export async function createLesson(
   db: DB,
-  input: Target & { date: string; time: string; timezone: string; minutes: number; topic?: string | null },
+  input: Target & { date: string; time: string; timezone: string; minutes: number; topic?: string | null; free?: boolean },
   by: number | null,
 ) {
   assert(input.minutes >= 15 && input.minutes <= 240, "مدة الحصة لازم تكون بين 15 و240 دقيقة");
@@ -143,6 +143,7 @@ export async function createLesson(
         startsAt,
         minutes: input.minutes,
         topic: input.topic ?? null,
+        free: input.free ?? false,
       })
       .returning();
     await audit(tx, by, "create", "lesson", l.id);

@@ -16,6 +16,7 @@ export async function settingsAction(_: ActionState, f: FormData): Promise<Actio
       getDb(),
       {
         academyName: str(f, "academyName"),
+        academyNameLatin: str(f, "academyNameLatin"),
         freeCancelHours: Number(str(f, "freeCancelHours")),
         payTeacherOnNoShow: str(f, "payTeacherOnNoShow") === "1",
         lowBalanceThreshold: Number(str(f, "lowBalanceThreshold")),

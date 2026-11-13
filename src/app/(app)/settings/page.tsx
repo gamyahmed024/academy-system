@@ -27,6 +27,7 @@ export default async function Settings() {
         <ActionForm action={settingsAction}>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="اسم الأكاديمية" hint="بيظهر في القائمة والإيصالات. الألوان بتتغير من ملف واحد في الكود."><input name="academyName" defaultValue={s.academyName} className="input" /></Field>
+            <Field label="الاسم بالحروف اللاتينية" hint="بيظهر للزوار والطلاب اللي صفحتهم مش بالعربي، لأنهم مش هيعرفوا يقروا الاسم العربي."><input name="academyNameLatin" defaultValue={s.academyNameLatin} className="input ltr text-left" /></Field>
             <Field label="الاعتذار المجاني قبل الحصة بكام ساعة؟"><input name="freeCancelHours" type="number" min={0} max={168} defaultValue={s.freeCancelHours} className="input" /></Field>
             <Field label="المدرس ياخد أجر الحصة لو الطالب غاب من غير اعتذار؟">
               <select name="payTeacherOnNoShow" defaultValue={s.payTeacherOnNoShow ? "1" : "0"} className="input">

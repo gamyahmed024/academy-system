@@ -11,6 +11,8 @@ const de: Dict = {
   loginButton: "Anmelden",
   passwordChanged: "Dein Passwort wurde geändert. Melde dich mit dem neuen an.",
   wrongLogin: "E-Mail oder Passwort ist falsch",
+  freeLesson: "Kostenlose Probestunde",
+  accountMessage: "Hallo {name}! Hier ist dein Konto bei {academy}. Dort siehst du deine Stundenzeiten und kommst direkt in deine Stunden. Link: {url} · E-Mail: {email} · Passwort: {password} . Du kannst das Passwort nach der Anmeldung ändern.",
   forgotLink: "Passwort vergessen?",
   forgotTitle: "Passwort vergessen",
   forgotText: "Gib die E-Mail ein, mit der du dich anmeldest. Die Akademie schickt dir so bald wie möglich ein neues vorläufiges Passwort per WhatsApp oder E-Mail.",

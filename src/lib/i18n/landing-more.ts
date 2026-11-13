@@ -128,7 +128,7 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
       [
         "هل الحصة التجريبية مجانية فعلًا؟",
-        "نعم، أول حصة مجانية وبلا أي التزام. نتعرف فيها على مستواك وهدفك ونقترح عليك الخطة المناسبة.",
+        "نعم، الحصة التجريبية مجانية ومدتها 30 دقيقة، وبلا أي التزام. نتعرف فيها على مستواك وهدفك ونقترح عليك الخطة المناسبة.",
       ],
       [
         "كيف تُحدَّد المواعيد؟",
@@ -148,8 +148,8 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
     ],
     trial: {
-      cta: "احجز حصة تجريبية مجانية",
-      title: "احجز حصتك التجريبية المجانية",
+      cta: "احجز حصة تجريبية مجانية (30 دقيقة)",
+      title: "احجز حصتك التجريبية المجانية (30 دقيقة)",
       text: "اترك بياناتك وسنتواصل معك خلال يوم عمل لنحدد موعد الحصة بتوقيت بلدك.",
       name: "الاسم",
       email: "البريد الإلكتروني",
@@ -235,7 +235,7 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
       [
         "Is the trial lesson really free?",
-        "Yes. Your first lesson is free with no commitment. We get to know your level and goal and suggest the right plan.",
+        "Yes. The 30-minute trial lesson is free, with no commitment. We get to know your level and goal and suggest the right plan.",
       ],
       [
         "How are lesson times set?",
@@ -255,8 +255,8 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
     ],
     trial: {
-      cta: "Book a free trial lesson",
-      title: "Book your free trial lesson",
+      cta: "Book a free 30-minute trial lesson",
+      title: "Book your free 30-minute trial lesson",
       text: "Leave your details and we will get back to you within one working day to set a time in your time zone.",
       name: "Name",
       email: "Email",
@@ -348,7 +348,7 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
       [
         "Le cours d'essai est-il vraiment gratuit ?",
-        "Oui. Votre premier cours est gratuit et sans engagement. Nous découvrons votre niveau et votre objectif et vous proposons le bon programme.",
+        "Oui. Le cours d'essai de 30 minutes est gratuit et sans engagement. Nous découvrons votre niveau et votre objectif et vous proposons le bon programme.",
       ],
       [
         "Comment les horaires sont-ils fixés ?",
@@ -368,8 +368,8 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
     ],
     trial: {
-      cta: "Réserver un cours d'essai gratuit",
-      title: "Réservez votre cours d'essai gratuit",
+      cta: "Réserver un cours d'essai gratuit (30 min)",
+      title: "Réservez votre cours d'essai gratuit de 30 minutes",
       text: "Laissez vos coordonnées et nous vous répondrons sous un jour ouvré pour fixer un horaire dans votre fuseau horaire.",
       name: "Nom",
       email: "E-mail",
@@ -465,7 +465,7 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
       [
         "Ist die Probestunde wirklich kostenlos?",
-        "Ja. Ihre erste Stunde ist kostenlos und unverbindlich. Wir lernen Ihr Niveau und Ihr Ziel kennen und schlagen den passenden Plan vor.",
+        "Ja. Die 30-minütige Probestunde ist kostenlos und unverbindlich. Wir lernen Ihr Niveau und Ihr Ziel kennen und schlagen den passenden Plan vor.",
       ],
       [
         "Wie werden die Termine festgelegt?",
@@ -485,8 +485,8 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
     ],
     trial: {
-      cta: "Kostenlose Probestunde buchen",
-      title: "Buchen Sie Ihre kostenlose Probestunde",
+      cta: "Kostenlose Probestunde (30 Min.) buchen",
+      title: "Buchen Sie Ihre kostenlose 30-minütige Probestunde",
       text: "Hinterlassen Sie Ihre Angaben, und wir melden uns innerhalb eines Werktags, um einen Termin in Ihrer Zeitzone zu finden.",
       name: "Name",
       email: "E-Mail",
@@ -575,7 +575,7 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
       [
         "¿La clase de prueba es de verdad gratis?",
-        "Sí. Tu primera clase es gratis y sin compromiso. Conocemos tu nivel y tu objetivo y te proponemos el plan adecuado.",
+        "Sí. La clase de prueba de 30 minutos es gratis y sin compromiso. Conocemos tu nivel y tu objetivo y te proponemos el plan adecuado.",
       ],
       [
         "¿Cómo se fijan los horarios?",
@@ -595,8 +595,8 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
     ],
     trial: {
-      cta: "Reserva una clase de prueba gratis",
-      title: "Reserva tu clase de prueba gratis",
+      cta: "Reserva una clase de prueba gratis (30 min)",
+      title: "Reserva tu clase de prueba gratis de 30 minutos",
       text: "Déjanos tus datos y te responderemos en un día hábil para fijar una hora en tu zona horaria.",
       name: "Nombre",
       email: "Correo electrónico",
@@ -686,7 +686,7 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
       [
         "Deneme dersi gerçekten ücretsiz mi?",
-        "Evet. İlk dersiniz ücretsiz ve hiçbir yükümlülük yok. Seviyenizi ve hedefinizi öğrenip size uygun planı öneririz.",
+        "Evet. 30 dakikalık deneme dersi ücretsiz ve hiçbir yükümlülük yok. Seviyenizi ve hedefinizi öğrenip size uygun planı öneririz.",
       ],
       [
         "Ders saatleri nasıl belirleniyor?",
@@ -706,8 +706,8 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
     ],
     trial: {
-      cta: "Ücretsiz deneme dersi al",
-      title: "Ücretsiz deneme dersinizi ayırtın",
+      cta: "Ücretsiz deneme dersi al (30 dk)",
+      title: "30 dakikalık ücretsiz deneme dersinizi ayırtın",
       text: "Bilgilerinizi bırakın, saat diliminize uygun bir zaman belirlemek için bir iş günü içinde size dönelim.",
       name: "Ad soyad",
       email: "E-posta",
@@ -796,7 +796,7 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
       [
         "Пробный урок правда бесплатный?",
-        "Да. Первый урок бесплатный и ни к чему не обязывает. Мы узнаём ваш уровень и цель и предлагаем подходящий план.",
+        "Да. Пробный урок длится 30 минут, он бесплатный и ни к чему не обязывает. Мы узнаём ваш уровень и цель и предлагаем подходящий план.",
       ],
       [
         "Как назначается время уроков?",
@@ -816,8 +816,8 @@ export const LANDING_MORE: Record<Lang, LandingMore> = {
       ],
     ],
     trial: {
-      cta: "Записаться на бесплатный пробный урок",
-      title: "Запишитесь на бесплатный пробный урок",
+      cta: "Записаться на бесплатный пробный урок (30 мин)",
+      title: "Запишитесь на бесплатный 30-минутный пробный урок",
       text: "Оставьте свои данные, и мы свяжемся с вами в течение рабочего дня, чтобы выбрать время в вашем часовом поясе.",
       name: "Имя",
       email: "Эл. почта",

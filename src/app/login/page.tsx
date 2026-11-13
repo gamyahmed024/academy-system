@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { nameFor } from "@/lib/academy-name";
 import { redirect } from "next/navigation";
 import { getCurrentUser, homeFor } from "@/server/session";
 import { getDb } from "@/db";
@@ -25,7 +26,8 @@ export default async function LoginPage(props: PageProps<"/login">) {
       <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl">
         <div className="mb-6 text-center">
           <Logo size={72} className="mx-auto mb-3" />
-          <h1 className="text-xl font-extrabold">{s.academyName}</h1>
+          <h1 className="text-xl font-extrabold">{nameFor(s, lang)}</h1>
+          {lang !== "ar" && <p lang="ar" className="text-sm text-slate-400">{s.academyName}</p>}
           <p className="text-sm text-slate-500">{t("loginSubtitle")}</p>
         </div>
         {changed && <p className="mb-4 rounded-lg bg-brand-soft p-3 text-center text-sm font-semibold text-brand">{t("passwordChanged")}</p>}

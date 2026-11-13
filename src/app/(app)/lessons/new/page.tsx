@@ -19,6 +19,9 @@ export default async function NewLesson(props: PageProps<"/lessons/new">) {
   const db = getDb();
   const [teachers, students, groups, s] = await Promise.all([listTeachers(db), listStudents(db), listGroups(db), getSettings(db)]);
   const today = DateTime.now().setZone(s.academyTimezone);
+  // A student still on trial gets a free 30-minute trial lesson by default.
+  const pre = students.find((x) => String(x.id) === one("student"));
+  const trial = mode === "single" && pre?.status === "trial";
   const qs = (m: string) => `/lessons/new?${new URLSearchParams({ ...Object.fromEntries(Object.entries(sp).filter(([, v]) => typeof v === "string")) as Record<string, string>, mode: m })}`;
 
   return (
@@ -39,7 +42,7 @@ export default async function NewLesson(props: PageProps<"/lessons/new">) {
                 {teachers.filter((t) => t.status !== "stopped").map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
               </select>
             </Field>
-            <Field label="المدة (بالدقيقة)"><input name="minutes" type="number" min={15} max={240} step={5} defaultValue={60} className="input" /></Field>
+            <Field label="المدة (بالدقيقة)"><input name="minutes" type="number" min={15} max={240} step={5} defaultValue={trial ? 30 : 60} className="input" /></Field>
             <Field label="الطالب" hint="اختار طالب أو مجموعة">
               <select name="studentId" defaultValue={one("student")} className="input">
                 <option value="">—</option>
@@ -63,7 +66,11 @@ export default async function NewLesson(props: PageProps<"/lessons/new">) {
             {mode === "single" ? (
               <>
                 <Field label="التاريخ"><input name="date" type="date" required defaultValue={today.toISODate()!} className="input" /></Field>
-                <Field label="الموضوع (اختياري)"><input name="topic" className="input" /></Field>
+                <Field label="الموضوع (اختياري)"><input name="topic" defaultValue={trial ? "حصة تجريبية" : ""} className="input" /></Field>
+                <label className="flex items-center gap-2 rounded-lg bg-accent-soft p-3 text-sm font-semibold sm:col-span-2">
+                  <input type="checkbox" name="free" value="1" defaultChecked={trial} />
+                  حصة تجريبية مجانية: مش هتتخصم من رصيد الطالب لو حضر (والمدرس بياخد أجرها عادي)
+                </label>
               </>
             ) : (
               <>

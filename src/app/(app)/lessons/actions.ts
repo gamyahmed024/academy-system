@@ -57,7 +57,7 @@ export async function createLessonAction(_: ActionState, f: FormData): Promise<A
         go = target.studentId ? `/students/${target.studentId}` : "/schedule";
         return `اتعمل ${res.count} حصة`;
       }
-      const l = await createLesson(db, { ...target, date: str(f, "date"), time: str(f, "time"), timezone: tz, minutes, topic: optStr(f, "topic") }, u.id);
+      const l = await createLesson(db, { ...target, date: str(f, "date"), time: str(f, "time"), timezone: tz, minutes, topic: optStr(f, "topic"), free: str(f, "free") === "1" }, u.id);
       go = `/lessons/${l.id}`;
     }),
   );

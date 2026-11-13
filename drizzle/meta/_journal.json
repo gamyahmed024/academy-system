@@ -36,6 +36,13 @@
       "when": 1794533145399,
       "tag": "0004_help_and_prices",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794534156646,
+      "tag": "0005_free_trial_and_latin_name",
+      "breakpoints": true
     }
   ]
 }

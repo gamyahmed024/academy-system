@@ -40,7 +40,9 @@ export async function FamilyHome({ user }: { user: CurrentUser }) {
     .sort((a, b) => b.startsAt.getTime() - a.startsAt.getTime())
     .slice(0, 12);
   const isGuardian = user.role === "guardian";
-  const low = balance <= s.lowBalanceThreshold;
+  // Before the first package (trial only) a zero balance is expected, so no "renew" warning.
+  const onTrial = kids.length > 0 && kids.every((k) => k.status === "trial");
+  const low = !onTrial && balance <= s.lowBalanceThreshold;
 
   return (
     <div>
@@ -62,6 +64,7 @@ export async function FamilyHome({ user }: { user: CurrentUser }) {
           <div className="text-sm text-slate-600">{t("nextLesson")}{isGuardian ? ` · ${name.get(next.studentId)}` : ""}</div>
           <div className="mt-1 text-xl font-extrabold">{fmtDate(next.startsAt, tz, loc)} · {fmtTime(next.startsAt, tz)}</div>
           <div className="mb-3 text-sm text-slate-600">{t("withTeacher", { name: next.teacherName })} · {t("minutes", { n: next.minutes })}</div>
+          {next.free && <p className="mb-3"><Badge tone="accent">{t("freeLesson")}</Badge></p>}
           <JoinButton url={next.joinUrl} {...join} />
         </section>
       )}

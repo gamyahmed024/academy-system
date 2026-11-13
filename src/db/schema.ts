@@ -177,6 +177,8 @@ export const lessons = pgTable(
     // optional override; otherwise the teacher's fixed meeting room is used
     meetingUrl: text("meeting_url"),
     topic: text("topic"),
+    /** A free lesson (the trial): attending it never takes a credit. */
+    free: boolean("free").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("lessons_teacher_start_idx").on(t.teacherId, t.startsAt), index("lessons_start_idx").on(t.startsAt)],
@@ -260,6 +262,8 @@ export const payouts = pgTable(
 export const settings = pgTable("settings", {
   id: integer("id").primaryKey().default(1),
   academyName: text("academy_name").notNull().default("الأكاديمية"),
+  /** The name in Latin letters, shown to visitors and students who don't read Arabic. */
+  academyNameLatin: text("academy_name_latin").notNull().default("Umam Academy"),
   academyTimezone: text("academy_timezone").notNull().default("Africa/Cairo"),
   // excused with at least this many hours of notice is not deducted
   freeCancelHours: integer("free_cancel_hours").notNull().default(24),
@@ -299,6 +303,8 @@ export const trialRequests = pgTable(
     lang: text("lang").notNull(),
     status: requestStatusEnum("status").notNull().default("new"),
     staffNote: text("staff_note"),
+    /** The student file made from this request, if any. */
+    studentId: integer("student_id").references(() => students.id),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("trial_requests_status_idx").on(t.status, t.createdAt), index("trial_requests_email_idx").on(t.email, t.createdAt)],

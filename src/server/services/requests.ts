@@ -156,3 +156,19 @@ export async function addPricePlan(db: DB, i: { lessonsPerMonth: number; minutes
 export async function removePricePlan(db: DB, id: number) {
   await db.update(pricePlans).set({ active: false }).where(eq(pricePlans.id, id));
 }
+
+/** A student file was made from a trial request: remember it, and move a new request to "contacted". */
+export async function linkRequestToStudent(db: DB, requestId: number, studentId: number) {
+  const [r] = await db.select().from(trialRequests).where(eq(trialRequests.id, requestId));
+  if (!r) return;
+  await db
+    .update(trialRequests)
+    .set({ studentId, status: r.status === "new" ? "contacted" : r.status })
+    .where(eq(trialRequests.id, requestId));
+}
+
+/** The page language a student used on their trial request, if they sent one. */
+export async function requestLangOf(db: DB, studentId: number): Promise<string | null> {
+  const [r] = await db.select({ lang: trialRequests.lang }).from(trialRequests).where(eq(trialRequests.studentId, studentId)).limit(1);
+  return r?.lang ?? null;
+}

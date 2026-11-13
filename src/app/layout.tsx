@@ -4,9 +4,10 @@ import { getLang } from "@/server/lang";
 import { getDb } from "@/db";
 import { getSettings } from "@/server/services/money";
 import { dirOf } from "@/lib/i18n";
+import { nameFor } from "@/lib/academy-name";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { academyName } = await getSettings(getDb());
+  const academyName = nameFor(await getSettings(getDb()), await getLang());
   return {
     title: { default: academyName, template: `%s · ${academyName}` },
     description: "نظام إدارة أكاديمية تعليم الأجانب",
