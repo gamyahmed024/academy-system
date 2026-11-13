@@ -50,6 +50,13 @@
       "when": 1794535936172,
       "tag": "0006_student_meeting_url",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794536397637,
+      "tag": "0007_trial_pay",
+      "breakpoints": true
     }
   ]
 }

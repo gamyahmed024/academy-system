@@ -29,11 +29,12 @@ export async function getSettings(db: Conn) {
 
 export async function updateSettings(
   db: DB,
-  input: { academyName: string; academyNameLatin?: string; freeCancelHours: number; payTeacherOnNoShow: boolean; lowBalanceThreshold: number; contactWhatsapp?: string | null },
+  input: { academyName: string; academyNameLatin?: string; freeCancelHours: number; payTeacherOnNoShow: boolean; lowBalanceThreshold: number; contactWhatsapp?: string | null; trialPayEgp?: string },
   by: number | null,
 ) {
   assert(input.academyName.trim(), "اكتب اسم الأكاديمية");
   assert(input.freeCancelHours >= 0 && input.freeCancelHours <= 168, "عدد الساعات مش منطقي");
+  assert(input.trialPayEgp === undefined || /^\d+(\.\d{1,2})?$/.test(input.trialPayEgp), "أجر الحصة التجريبية لازم يكون رقم");
   await getSettings(db);
   const contactWhatsapp = input.contactWhatsapp?.trim() || null;
   assert(!contactWhatsapp || contactWhatsapp.replace(/\D/g, "").length >= 8, "اكتب رقم الواتساب بكود الدولة");
@@ -239,6 +240,37 @@ export async function teacherMonthLessons(db: Conn, teacherId: number, month: st
   return r.n;
 }
 
+/** A teacher's lessons and pay for a month: regular lessons at their rate, free trial lessons at the trial rate. */
+export async function teacherMonthPay(
+  db: Conn,
+  teacher: { id: number; payPerLessonEgp: string },
+  month: string,
+  s: { academyTimezone: string; trialPayEgp: string },
+) {
+  const { start, end } = monthBounds(month, s.academyTimezone);
+  const [r] = await db
+    .select({
+      n: sql<number>`count(distinct ${lessons.id})::int`,
+      trial: sql<number>`count(distinct ${lessons.id}) filter (where ${lessons.free})::int`,
+    })
+    .from(lessons)
+    .innerJoin(attendance, eq(attendance.lessonId, lessons.id))
+    .where(
+      and(
+        eq(lessons.teacherId, teacher.id),
+        eq(attendance.teacherPaid, true),
+        gte(lessons.startsAt, start),
+        lt(lessons.startsAt, end),
+      ),
+    );
+  const regular = r.n - r.trial;
+  return {
+    lessons: r.n,
+    trialLessons: r.trial,
+    amountEgp: sumMoney([mulMoney(teacher.payPerLessonEgp, regular), mulMoney(s.trialPayEgp, r.trial)]),
+  };
+}
+
 /** Close a teacher's month: freezes the amount so later changes cannot alter it. */
 export async function closeTeacherMonth(db: DB, teacherId: number, month: string, by: number | null) {
   return db.transaction(async (tx) => {
@@ -250,12 +282,12 @@ export async function closeTeacherMonth(db: DB, teacherId: number, month: string
       .from(payouts)
       .where(and(eq(payouts.teacherId, teacherId), eq(payouts.month, month)));
     assert(!already, "الشهر ده اتقفل للمدرس ده قبل كده");
-    const n = await teacherMonthLessons(tx, teacherId, month, s.academyTimezone);
+    const pay = await teacherMonthPay(tx, t, month, s);
     const [p] = await tx
       .insert(payouts)
-      .values({ teacherId, month, lessons: n, amountEgp: mulMoney(t.payPerLessonEgp, n) })
+      .values({ teacherId, month, lessons: pay.lessons, amountEgp: pay.amountEgp })
       .returning();
-    await audit(tx, by, "close", "payout", p.id, { month, lessons: n });
+    await audit(tx, by, "close", "payout", p.id, { month, lessons: pay.lessons, trialLessons: pay.trialLessons });
     return p;
   });
 }
@@ -284,9 +316,9 @@ export async function monthReport(db: DB, month: string) {
     if (c) {
       teacherRows.push({ teacherId: t.id, name: t.name, lessons: c.lessons, amountEgp: c.amountEgp, closed: true, payoutId: c.id, paidOn: c.paidOn });
     } else {
-      const n = await teacherMonthLessons(db, t.id, month, s.academyTimezone);
-      if (n === 0 && t.status === "stopped") continue;
-      teacherRows.push({ teacherId: t.id, name: t.name, lessons: n, amountEgp: mulMoney(t.payPerLessonEgp, n), closed: false, payoutId: null, paidOn: null });
+      const pay = await teacherMonthPay(db, t, month, s);
+      if (pay.lessons === 0 && t.status === "stopped") continue;
+      teacherRows.push({ teacherId: t.id, name: t.name, lessons: pay.lessons, amountEgp: pay.amountEgp, closed: false, payoutId: null, paidOn: null });
     }
   }
   const teachersEgp = sumMoney(teacherRows.map((r) => r.amountEgp));

@@ -271,6 +271,8 @@ export const settings = pgTable("settings", {
   freeCancelHours: integer("free_cancel_hours").notNull().default(24),
   payTeacherOnNoShow: boolean("pay_teacher_on_no_show").notNull().default(true),
   lowBalanceThreshold: integer("low_balance_threshold").notNull().default(1),
+  // what the teacher is paid for a free trial lesson (instead of their usual rate)
+  trialPayEgp: numeric("trial_pay_egp", { precision: 12, scale: 2 }).notNull().default("30"),
   // shown as the contact button on the public welcome page
   contactWhatsapp: text("contact_whatsapp"),
 });

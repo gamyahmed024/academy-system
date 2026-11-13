@@ -21,6 +21,7 @@ export async function settingsAction(_: ActionState, f: FormData): Promise<Actio
         payTeacherOnNoShow: str(f, "payTeacherOnNoShow") === "1",
         lowBalanceThreshold: Number(str(f, "lowBalanceThreshold")),
         contactWhatsapp: String(f.get("contactWhatsapp") ?? ""),
+        trialPayEgp: str(f, "trialPayEgp") || "0",
       },
       u.id,
     ),
