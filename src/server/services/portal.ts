@@ -115,9 +115,10 @@ export async function lessonsForStudents(db: DB, studentIds: number[], from: Dat
     .where(inArray(groupMembers.studentId, studentIds));
   const groupIds = [...new Set(memberships.map((m) => m.groupId))];
   const rows = await db
-    .select({ l: lessons, teacherName: teachers.name, teacherMeetingUrl: teachers.meetingUrl })
+    .select({ l: lessons, teacherName: teachers.name, teacherMeetingUrl: teachers.meetingUrl, studentMeetingUrl: students.meetingUrl })
     .from(lessons)
     .innerJoin(teachers, eq(teachers.id, lessons.teacherId))
+    .leftJoin(students, eq(students.id, lessons.studentId))
     .where(and(gte(lessons.startsAt, from), lt(lessons.startsAt, to)))
     .orderBy(asc(lessons.startsAt));
   const out = [];
@@ -128,7 +129,7 @@ export async function lessonsForStudents(db: DB, studentIds: number[], from: Dat
         ? memberships.filter((m) => m.groupId === r.l.groupId).map((m) => m.studentId)
         : [];
     for (const studentId of who) {
-      out.push({ ...r.l, studentId, teacherName: r.teacherName, joinUrl: r.l.meetingUrl ?? r.teacherMeetingUrl });
+      out.push({ ...r.l, studentId, teacherName: r.teacherName, joinUrl: r.l.meetingUrl ?? r.studentMeetingUrl ?? r.teacherMeetingUrl });
     }
   }
   if (!out.length) return [];

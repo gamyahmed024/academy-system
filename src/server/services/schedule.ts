@@ -310,6 +310,7 @@ export async function listLessons(
       l: lessons,
       teacherName: teachers.name,
       teacherMeetingUrl: teachers.meetingUrl,
+      studentMeetingUrl: students.meetingUrl,
       studentName: students.name,
       studentTimezone: students.timezone,
       studentWhatsapp: students.whatsapp,
@@ -330,7 +331,7 @@ export async function listLessons(
     studentWhatsapp: r.studentWhatsapp,
     groupName: r.groupName,
     title: r.studentName ?? r.groupName ?? "",
-    joinUrl: r.l.meetingUrl ?? r.teacherMeetingUrl,
+    joinUrl: r.l.meetingUrl ?? r.studentMeetingUrl ?? r.teacherMeetingUrl,
     recorded: r.recorded,
   }));
 }
@@ -371,7 +372,7 @@ export async function getLesson(db: DB, id: number) {
     groupName: r.groupName,
     series: r.series,
     title: r.studentName ?? r.groupName ?? "",
-    joinUrl: r.l.meetingUrl ?? r.teacher.meetingUrl,
+    joinUrl: r.l.meetingUrl ?? (r.l.studentId ? participants[0]?.meetingUrl : null) ?? r.teacher.meetingUrl,
     participants,
     attendance: att,
   };

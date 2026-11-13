@@ -6,7 +6,9 @@ import { DateTime } from "luxon";
 import { testDb, resetDb, closeDb } from "./db";
 import type { DB } from "@/db";
 import { createGuardian, createStudent, createTeacher, createGroup, walletBalance } from "@/server/services/people";
-import { createLesson } from "@/server/services/schedule";
+import { createLesson, getLesson, listLessons } from "@/server/services/schedule";
+import { students } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { recordPayment } from "@/server/services/money";
 import { createUser, verifyLogin } from "@/server/services/auth";
 import {
@@ -118,6 +120,25 @@ describe("who sees what", () => {
     expect(group.map((r) => r.studentId)).toEqual([ids.noah]); // Emma is in the group but not his child
     expect(rows.filter((r) => r.studentId === ids.liam)).toHaveLength(2);
     expect(rows.find((r) => r.id === ids.liamFar)?.joinUrl).toBe("https://meet.google.com/abc");
+  });
+});
+
+describe("meeting links", () => {
+  it("a student's own room overrides the teacher's room for one-to-one lessons only", async () => {
+    await db.update(students).set({ meetingUrl: "https://meet.google.com/liam-own" }).where(eq(students.id, ids.liam));
+    await db.update(students).set({ meetingUrl: "https://meet.google.com/noah-own" }).where(eq(students.id, ids.noah));
+    const from = new Date(Date.now() - 86_400_000);
+    const to = new Date(Date.now() + 7 * 86_400_000);
+    const rows = await lessonsForStudents(db, [ids.liam, ids.noah], from, to);
+    expect(rows.find((r) => r.id === ids.liamFar)?.joinUrl).toBe("https://meet.google.com/liam-own");
+    // the group lesson keeps the teacher's room (Omar has none)
+    expect(rows.find((r) => r.id === ids.groupLesson)?.joinUrl).toBeNull();
+    expect((await getLesson(db, ids.liamFar))?.joinUrl).toBe("https://meet.google.com/liam-own");
+    const list = await listLessons(db, { from, to, teacherId: ids.sara });
+    expect(list.find((r) => r.id === ids.liamFar)?.joinUrl).toBe("https://meet.google.com/liam-own");
+    expect(list.find((r) => r.id === ids.emmaPast)?.joinUrl).toBe("https://meet.google.com/abc");
+    await db.update(students).set({ meetingUrl: null }).where(eq(students.id, ids.liam));
+    await db.update(students).set({ meetingUrl: null }).where(eq(students.id, ids.noah));
   });
 });
 

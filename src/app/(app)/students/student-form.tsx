@@ -3,7 +3,7 @@ import { TimezoneSelect } from "@/components/tz-select";
 
 type S = {
   name?: string; email?: string | null; whatsapp?: string | null; country?: string | null;
-  nativeLanguage?: string | null; timezone?: string; subject?: string | null; level?: string | null;
+  nativeLanguage?: string | null; timezone?: string; subject?: string | null; level?: string | null; meetingUrl?: string | null;
   status?: string; guardianId?: number | null; notes?: string | null;
 };
 
@@ -33,6 +33,11 @@ export function StudentFields({ s = {}, guardians }: { s?: S; guardians: { id: n
       </Field>
       <Field label="المادة"><input name="subject" defaultValue={s.subject ?? ""} placeholder="عامية مصرية، فصحى، قرآن…" className="input" /></Field>
       <Field label="المستوى"><input name="level" defaultValue={s.level ?? ""} placeholder="مبتدئ، متوسط، متقدم" className="input" /></Field>
+      <div className="sm:col-span-2">
+        <Field label="رابط حصص الطالب (اختياري)" hint="رابط Meet أو Zoom خاص بالطالب ده يعمله المدرس. لو موجود، الطالب والمدرس بيدخلوا عليه في حصصه الفردية بدل رابط المدرس العام.">
+          <input name="meetingUrl" type="url" placeholder="https://meet.google.com/xxx-xxxx-xxx" defaultValue={s.meetingUrl ?? ""} className="input ltr text-left" />
+        </Field>
+      </div>
       <div className="sm:col-span-2">
         <Field label="ملاحظات"><textarea name="notes" defaultValue={s.notes ?? ""} rows={3} className="input" /></Field>
       </div>
