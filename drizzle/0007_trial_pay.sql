@@ -1,0 +1,1 @@
+ALTER TABLE "settings" ADD COLUMN "trial_pay_egp" numeric(12, 2) DEFAULT '30' NOT NULL;

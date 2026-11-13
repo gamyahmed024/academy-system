@@ -6,8 +6,8 @@ import { payouts } from "@/db/schema";
 import { requireStaff } from "@/server/session";
 import { getTeacher } from "@/server/services/people";
 import { listLessons } from "@/server/services/schedule";
-import { getSettings, teacherMonthLessons } from "@/server/services/money";
-import { fmtMoney, mulMoney } from "@/lib/domain/rules";
+import { getSettings, teacherMonthLessons, teacherMonthPay } from "@/server/services/money";
+import { fmtMoney } from "@/lib/domain/rules";
 import { fmtDate, fmtTime, monthKey, inZone } from "@/lib/domain/time";
 import { ActionForm } from "@/components/action-form";
 import { PortalAccountCard } from "@/components/portal-account";
@@ -30,7 +30,7 @@ export default async function TeacherPage(props: PageProps<"/teachers/[id]">) {
   const lastMonth = inZone(now, tz).minus({ months: 1 }).toFormat("yyyy-MM");
   const [upcoming, nThis, nLast, closed] = await Promise.all([
     listLessons(db, { from: now, to: new Date(now.getTime() + 7 * 86_400_000), teacherId: id }),
-    teacherMonthLessons(db, id, thisMonth, tz),
+    teacherMonthPay(db, t, thisMonth, s),
     teacherMonthLessons(db, id, lastMonth, tz),
     db.select().from(payouts).where(eq(payouts.teacherId, id)).orderBy(desc(payouts.month)),
   ]);
@@ -42,8 +42,8 @@ export default async function TeacherPage(props: PageProps<"/teachers/[id]">) {
       <BackLink href="/teachers">المدرسين</BackLink>
       <PageHeader title={t.name} subtitle={t.subjects ?? undefined} actions={<Link href={`/lessons/new?teacher=${t.id}`} className="btn">+ حصة</Link>} />
       <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Kpi label="حصص الشهر ده" value={nThis} />
-        <Kpi label="مستحقات الشهر ده" value={fmtMoney(mulMoney(t.payPerLessonEgp, nThis))} />
+        <Kpi label="حصص الشهر ده" value={nThis.trialLessons ? `${nThis.lessons} (منها ${nThis.trialLessons} تجريبية)` : nThis.lessons} />
+        <Kpi label="مستحقات الشهر ده" value={fmtMoney(nThis.amountEgp)} />
         <Kpi label="حصص الشهر اللي فات" value={nLast} />
         <Kpi label="حصص الأسبوع الجاي" value={upcoming.length} />
       </div>

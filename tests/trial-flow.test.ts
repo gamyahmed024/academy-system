@@ -10,7 +10,8 @@ import type { DB } from "@/db";
 import { students, trialRequests } from "@/db/schema";
 import { createStudent, createTeacher, walletBalance } from "@/server/services/people";
 import { createLesson } from "@/server/services/schedule";
-import { recordAttendance, recordPayment } from "@/server/services/money";
+import { recordAttendance, recordPayment, teacherMonthPay, getSettings, updateSettings } from "@/server/services/money";
+import { monthKey } from "@/lib/domain/time";
 import { createUser } from "@/server/services/auth";
 import { createTrialRequest, listTrialRequests, linkRequestToStudent, requestLangOf } from "@/server/services/requests";
 
@@ -56,5 +57,16 @@ describe("trial journey", () => {
     const paid = await createLesson(db, { teacherId: teacher.id, studentId: lena.id, minutes: 45, ...at(-5) }, admin);
     await recordAttendance(db, { lessonId: paid.id, studentId: lena.id, state: "present" }, admin);
     expect(await walletBalance(db, lena.walletId)).toBe(7);
+
+    // the teacher gets the special trial rate (default 30 EGP) for the trial and the usual rate otherwise
+    let s = await getSettings(db);
+    expect(s.trialPayEgp).toBe("30.00");
+    const month = monthKey(new Date(Date.now() - 5 * 3_600_000), s.academyTimezone);
+    let pay = await teacherMonthPay(db, teacher, month, s);
+    expect(pay).toEqual({ lessons: 2, trialLessons: 1, amountEgp: "180.00" });
+    await updateSettings(db, { academyName: s.academyName, freeCancelHours: s.freeCancelHours, payTeacherOnNoShow: s.payTeacherOnNoShow, lowBalanceThreshold: s.lowBalanceThreshold, trialPayEgp: "50" }, admin);
+    s = await getSettings(db);
+    pay = await teacherMonthPay(db, teacher, month, s);
+    expect(pay.amountEgp).toBe("200.00");
   });
 });

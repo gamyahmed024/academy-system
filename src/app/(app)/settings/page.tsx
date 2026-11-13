@@ -35,6 +35,7 @@ export default async function Settings() {
                 <option value="0">لأ</option>
               </select>
             </Field>
+            <Field label="أجر المدرس في الحصة التجريبية (جنيه)" hint="الحصة التجريبية مجانية للطالب، والمدرس بياخد المبلغ ده عليها بدل أجره العادي."><input name="trialPayEgp" inputMode="decimal" defaultValue={s.trialPayEgp} className="input ltr text-left" /></Field>
             <Field label="نبّهني لما رصيد الطالب يوصل لـ"><input name="lowBalanceThreshold" type="number" min={0} max={10} defaultValue={s.lowBalanceThreshold} className="input" /></Field>
             <Field label="واتساب الأكاديمية" hint="بكود الدولة، مثلًا +201001234567. بيظهر كزرار تواصل في الصفحة الرئيسية للزوار، ولو سبته فاضي الزرار مش هيظهر."><input name="contactWhatsapp" defaultValue={s.contactWhatsapp ?? ""} className="input ltr text-left" inputMode="tel" /></Field>
           </div>

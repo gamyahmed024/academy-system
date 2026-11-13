@@ -6,8 +6,8 @@ import type { CurrentUser } from "@/server/session";
 import { getT } from "@/server/lang";
 import { teacherOf } from "@/server/services/portal";
 import { listLessons } from "@/server/services/schedule";
-import { getSettings, teacherMonthLessons } from "@/server/services/money";
-import { fmtMoney, mulMoney } from "@/lib/domain/rules";
+import { getSettings, teacherMonthPay } from "@/server/services/money";
+import { fmtMoney } from "@/lib/domain/rules";
 import { fmtDate, fmtTime, monthKey, inZone, timezoneLabel } from "@/lib/domain/time";
 import { dateLocale, zoneLabel } from "@/lib/i18n";
 import { PageHeader, Kpi, Empty, Badge, JoinButton } from "@/components/ui";
@@ -28,7 +28,7 @@ export async function TeacherHome({ user }: { user: CurrentUser }) {
   const [upcoming, past, nMonth, closed] = await Promise.all([
     listLessons(db, { from: today.toJSDate(), to: today.plus({ days: 8 }).toJSDate(), teacherId: teacher.id }),
     listLessons(db, { from: today.minus({ days: 14 }).toJSDate(), to: now, teacherId: teacher.id }),
-    teacherMonthLessons(db, teacher.id, month, s.academyTimezone),
+    teacherMonthPay(db, teacher, month, s),
     db.select().from(payouts).where(eq(payouts.teacherId, teacher.id)).orderBy(desc(payouts.month)).limit(6),
   ]);
   const unrecorded = past.filter((l) => l.recorded === 0);
@@ -43,8 +43,8 @@ export async function TeacherHome({ user }: { user: CurrentUser }) {
       <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
         <Kpi label={t("todayLessons")} value={todays.length} />
         <Kpi label={t("needRecording")} value={unrecorded.length} tone={unrecorded.length ? "red" : undefined} />
-        <Kpi label={t("monthLessons")} value={nMonth} />
-        <Kpi label={t("monthPay")} value={egp(mulMoney(teacher.payPerLessonEgp, nMonth))} />
+        <Kpi label={t("monthLessons")} value={nMonth.lessons} />
+        <Kpi label={t("monthPay")} value={egp(nMonth.amountEgp)} />
       </div>
 
       {unrecorded.length > 0 && (

@@ -69,7 +69,7 @@ export default async function NewLesson(props: PageProps<"/lessons/new">) {
                 <Field label="الموضوع (اختياري)"><input name="topic" defaultValue={trial ? "حصة تجريبية" : ""} className="input" /></Field>
                 <label className="flex items-center gap-2 rounded-lg bg-accent-soft p-3 text-sm font-semibold sm:col-span-2">
                   <input type="checkbox" name="free" value="1" defaultChecked={trial} />
-                  حصة تجريبية مجانية: مش هتتخصم من رصيد الطالب لو حضر (والمدرس بياخد أجرها عادي)
+                  حصة تجريبية مجانية: مش هتتخصم من رصيد الطالب لو حضر (والمدرس بياخد عليها أجر الحصة التجريبية اللي في الإعدادات)
                 </label>
               </>
             ) : (
