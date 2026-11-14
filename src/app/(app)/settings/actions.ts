@@ -8,6 +8,7 @@ import { createUser, changePassword, verifyLogin } from "@/server/services/auth"
 import { run, str, type ActionState } from "@/server/action";
 import { assert } from "@/server/services/errors";
 import { addPricePlan, removePricePlan } from "@/server/services/requests";
+import { wipeTrialData } from "@/server/services/cleanup";
 
 export async function settingsAction(_: ActionState, f: FormData): Promise<ActionState> {
   const u = await requireAdmin();
@@ -75,4 +76,14 @@ export async function removePlanAction(f: FormData) {
   await requireAdmin();
   await removePricePlan(getDb(), Number(f.get("id")));
   revalidatePath("/", "layout");
+}
+
+export async function wipeTrialDataAction(_: ActionState, f: FormData): Promise<ActionState> {
+  const u = await requireAdmin();
+  const r = await run(async () => {
+    await wipeTrialData(getDb(), str(f, "confirmWord"), u.id);
+    return "اتمسحت كل بيانات التجربة. النظام دلوقتي فاضي وجاهز للطلاب الحقيقيين.";
+  });
+  revalidatePath("/", "layout");
+  return r;
 }

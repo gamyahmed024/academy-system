@@ -3,7 +3,8 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { getDb } from "@/db";
-import { requireStaff } from "@/server/session";
+import { requireStaff, requireAdmin } from "@/server/session";
+import { deleteStudent } from "@/server/services/cleanup";
 import { createStudent, updateStudent, type StudentInput } from "@/server/services/people";
 import { run, str, optStr, optId, type ActionState } from "@/server/action";
 import { linkRequestToStudent } from "@/server/services/requests";
@@ -43,4 +44,15 @@ export async function updateStudentAction(id: number, _: ActionState, f: FormDat
   if (r?.error) return r;
   revalidatePath(`/students/${id}`);
   redirect(`/students/${id}`);
+}
+
+export async function deleteStudentAction(id: number, _: ActionState, f: FormData): Promise<ActionState> {
+  void f;
+  const u = await requireAdmin();
+  const r = await run(async () => {
+    await deleteStudent(getDb(), id, u.id);
+  });
+  if (r?.error) return r;
+  revalidatePath("/", "layout");
+  redirect("/students?deleted=1");
 }

@@ -6,8 +6,9 @@ import { PageHeader, Empty, BalanceBadge } from "@/components/ui";
 
 export const metadata = { title: "العائلات" };
 
-export default async function Families() {
+export default async function Families(props: PageProps<"/families">) {
   await requireStaff();
+  const deleted = (await props.searchParams).deleted === "1";
   const rows = await listGuardians(getDb());
   return (
     <div>
@@ -16,6 +17,7 @@ export default async function Families() {
         subtitle="ولي أمر واحد بيدفع لأكتر من طالب، والحصص بتتخصم من محفظة واحدة مشتركة"
         actions={<Link href="/families/new" className="btn">+ عيلة جديدة</Link>}
       />
+      {deleted && <div role="status" className="mb-4 rounded-lg bg-green-50 p-3 text-sm font-semibold text-green-700">✓ اتمسحت العيلة وأولادها.</div>}
       <div className="card overflow-x-auto !p-0">
         {rows.length === 0 ? (
           <div className="p-5"><Empty>مفيش عائلات لسه.</Empty></div>

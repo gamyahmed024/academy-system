@@ -3,7 +3,8 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { getDb } from "@/db";
-import { requireStaff } from "@/server/session";
+import { requireStaff, requireAdmin } from "@/server/session";
+import { deleteGuardian } from "@/server/services/cleanup";
 import { createGuardian, updateGuardian, type GuardianInput } from "@/server/services/people";
 import { run, str, optStr, type ActionState } from "@/server/action";
 
@@ -30,4 +31,15 @@ export async function updateGuardianAction(id: number, _: ActionState, f: FormDa
   const r = await run(() => updateGuardian(getDb(), id, read(f), u.id));
   revalidatePath(`/families/${id}`);
   return r;
+}
+
+export async function deleteGuardianAction(id: number, _: ActionState, f: FormData): Promise<ActionState> {
+  void f;
+  const u = await requireAdmin();
+  const r = await run(async () => {
+    await deleteGuardian(getDb(), id, u.id);
+  });
+  if (r?.error) return r;
+  revalidatePath("/", "layout");
+  redirect("/families?deleted=1");
 }

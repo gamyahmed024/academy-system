@@ -13,9 +13,11 @@ export default async function Students(props: PageProps<"/students">) {
   const q = typeof sp.q === "string" ? sp.q : "";
   const status = typeof sp.status === "string" ? sp.status : "";
   const rows = await listStudents(getDb(), { q, status });
+  const deleted = sp.deleted === "1";
   return (
     <div>
       <PageHeader title="الطلاب" subtitle={`${rows.length} طالب`} actions={<Link href="/students/new" className="btn">+ طالب جديد</Link>} />
+      {deleted && <div role="status" className="mb-4 rounded-lg bg-green-50 p-3 text-sm font-semibold text-green-700">✓ اتمسح الطالب وكل بياناته.</div>}
       <form className="mb-4 flex flex-wrap gap-2">
         <input name="q" defaultValue={q} placeholder="دوّر بالاسم أو الإيميل" className="input max-w-xs" />
         <select name="status" defaultValue={status} className="input max-w-[12rem]">
