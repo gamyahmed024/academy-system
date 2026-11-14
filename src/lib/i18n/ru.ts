@@ -105,6 +105,15 @@ const ru: Dict = {
   att_absent: "Не пришёл (без предупреждения)",
   att_excused: "Отменил заранее",
   att_teacher_cancelled: "Отменил преподаватель",
+
+  // install as an app (phone home screen)
+  installApp: "Установить приложение",
+  installTitle: "Установите приложение на телефон",
+  installIos1: "Откройте этот сайт в Safari.",
+  installIos2: "Нажмите «Поделиться» (квадрат со стрелкой ⬆).",
+  installIos3: "Выберите «На экран „Домой“», затем «Добавить».",
+  installOther: "Откройте меню браузера (⋮) и выберите «Установить приложение» или «Добавить на главный экран».",
+  installOk: "Готово",
 };
 
 export default ru;

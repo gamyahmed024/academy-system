@@ -105,6 +105,15 @@ const tr: Dict = {
   att_absent: "Gelmedi (haber vermeden)",
   att_excused: "Önceden iptal etti",
   att_teacher_cancelled: "Öğretmen iptal etti",
+
+  // install as an app (phone home screen)
+  installApp: "Uygulamayı yükle",
+  installTitle: "Uygulamayı telefonuna yükle",
+  installIos1: "Bu siteyi Safari’de aç.",
+  installIos2: "Paylaş düğmesine dokun (oklu kare ⬆).",
+  installIos3: "“Ana Ekrana Ekle”yi seç, sonra “Ekle”ye dokun.",
+  installOther: "Tarayıcı menüsünü (⋮) aç ve “Uygulamayı yükle” ya da “Ana ekrana ekle”yi seç.",
+  installOk: "Tamam",
 };
 
 export default tr;

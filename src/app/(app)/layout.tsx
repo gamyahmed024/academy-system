@@ -5,6 +5,9 @@ import { getSettings } from "@/server/services/money";
 import { Nav } from "@/components/nav";
 import { countNewRequests } from "@/server/services/requests";
 import { logout } from "../login/actions";
+import { InstallApp } from "@/components/install-app";
+import { installTexts } from "@/lib/install";
+import ar from "@/lib/i18n/ar";
 
 export default async function AppLayout({ children }: LayoutProps<"/">) {
   const user = await requireStaff();
@@ -23,6 +26,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
         <div className="mt-4 border-t border-white/10 pt-4 text-sm text-sidebar-text md:absolute md:bottom-4 md:w-48">
           <div className="font-semibold text-white">{user.name}</div>
           <div className="text-xs">{user.role === "admin" ? "الإدارة" : "سكرتارية"}</div>
+          <InstallApp texts={installTexts(ar)} className="mt-2 block rounded-md bg-sky px-2 py-1 text-xs font-bold text-sidebar hover:brightness-110" />
           <a href="/welcome" target="_blank" rel="noopener" className="mt-2 block text-xs underline hover:text-white">
             عرض الصفحة الرئيسية للزوار ↗
           </a>

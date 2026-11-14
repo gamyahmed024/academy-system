@@ -105,6 +105,15 @@ const fr: Dict = {
   att_absent: "Absent (sans prévenir)",
   att_excused: "Annulé à l'avance",
   att_teacher_cancelled: "Annulé par l'enseignant",
+
+  // install as an app (phone home screen)
+  installApp: "Installer l’application",
+  installTitle: "Installer l’application sur votre téléphone",
+  installIos1: "Ouvrez ce site dans Safari.",
+  installIos2: "Touchez le bouton Partager (le carré avec une flèche ⬆).",
+  installIos3: "Choisissez « Sur l’écran d’accueil », puis « Ajouter ».",
+  installOther: "Ouvrez le menu du navigateur (⋮) et choisissez « Installer l’application » ou « Ajouter à l’écran d’accueil ».",
+  installOk: "OK",
 };
 
 export default fr;
