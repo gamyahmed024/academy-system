@@ -105,6 +105,15 @@ const de: Dict = {
   att_absent: "Abwesend (ohne Absage)",
   att_excused: "Vorher abgesagt",
   att_teacher_cancelled: "Von der Lehrkraft abgesagt",
+
+  // install as an app (phone home screen)
+  installApp: "App installieren",
+  installTitle: "App auf dem Handy installieren",
+  installIos1: "Öffnen Sie diese Seite in Safari.",
+  installIos2: "Tippen Sie auf „Teilen“ (das Quadrat mit dem Pfeil ⬆).",
+  installIos3: "Wählen Sie „Zum Home-Bildschirm“ und dann „Hinzufügen“.",
+  installOther: "Öffnen Sie das Browsermenü (⋮) und wählen Sie „App installieren“ oder „Zum Startbildschirm hinzufügen“.",
+  installOk: "OK",
 };
 
 export default de;

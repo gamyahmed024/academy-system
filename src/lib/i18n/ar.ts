@@ -113,6 +113,15 @@ const ar = {
   att_absent: "غاب من غير اعتذار",
   att_excused: "اعتذر",
   att_teacher_cancelled: "المدرس لغى",
+
+  // install as an app (phone home screen)
+  installApp: "ثبّت التطبيق",
+  installTitle: "ثبّت التطبيق على موبايلك",
+  installIos1: "افتح الموقع من متصفح Safari.",
+  installIos2: "دوس على زر المشاركة (المربع اللي طالع منه سهم ⬆).",
+  installIos3: "اختار «إضافة إلى الشاشة الرئيسية» وبعدين «إضافة».",
+  installOther: "افتح قائمة المتصفح (⋮) واختار «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».",
+  installOk: "تمام",
 };
 
 export default ar;

@@ -7,6 +7,8 @@ import { LANDING } from "@/lib/i18n/landing";
 import { LANDING_MORE, DEMO_WORDS } from "@/lib/i18n/landing-more";
 import { LANDING_PHOTOS as PHOTO } from "@/lib/landing-photos";
 import { LangSwitch } from "@/components/lang-switch";
+import { InstallApp } from "@/components/install-app";
+import { installTexts } from "@/lib/install";
 import { Vowelled, WordTry } from "@/components/word-try";
 import { TrialForm } from "@/components/trial-form";
 import { requestTrial } from "./actions";
@@ -93,6 +95,7 @@ export default async function Welcome() {
                 {m.trial.cta}
               </a>
               {contactBtn("rounded-xl border-2 border-white/70 px-6 py-3 font-bold transition hover:bg-white/10")}
+              <InstallApp texts={installTexts(LANGS[lang])} className="rounded-xl border-2 border-sky/70 px-6 py-3 font-bold text-sky transition hover:bg-white/10" />
             </div>
           </div>
           <div className="relative mx-auto w-full max-w-md lg:max-w-none">

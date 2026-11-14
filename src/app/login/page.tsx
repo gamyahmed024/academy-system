@@ -8,6 +8,9 @@ import { getSettings } from "@/server/services/money";
 import { getT } from "@/server/lang";
 import { ActionForm } from "@/components/action-form";
 import { LangSwitch } from "@/components/lang-switch";
+import { InstallApp } from "@/components/install-app";
+import { installTexts } from "@/lib/install";
+import { LANGS } from "@/lib/i18n";
 import { login } from "./actions";
 
 export async function generateMetadata() {
@@ -47,6 +50,7 @@ export default async function LoginPage(props: PageProps<"/login">) {
           {t("forgotLink")}
         </Link>
       </div>
+      <InstallApp texts={installTexts(LANGS[lang])} className="rounded-xl border-2 border-white/70 px-5 py-2 font-bold text-white hover:bg-white/10" />
       <LangSwitch current={lang} label={t("language")} className="text-white" />
     </main>
   );

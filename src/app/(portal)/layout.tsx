@@ -6,6 +6,9 @@ import { getSettings } from "@/server/services/money";
 import { getT } from "@/server/lang";
 import { nameFor } from "@/lib/academy-name";
 import { LangSwitch } from "@/components/lang-switch";
+import { InstallApp } from "@/components/install-app";
+import { installTexts } from "@/lib/install";
+import { LANGS } from "@/lib/i18n";
 import { logout } from "../login/actions";
 
 const ROLE_KEY = { teacher: "roleTeacher", student: "roleStudent", guardian: "roleGuardian" } as const;
@@ -26,6 +29,7 @@ export default async function PortalLayout({ children }: { children: React.React
             <span>
               <span className="font-semibold text-white">{user.name}</span> · {t(ROLE_KEY[user.role as keyof typeof ROLE_KEY])}
             </span>
+            <InstallApp texts={installTexts(LANGS[lang])} className="rounded-lg bg-sky px-3 py-1 font-bold text-sidebar hover:brightness-110" />
             <LangSwitch current={lang} label={t("language")} />
             <Link href="/my/password" className="underline hover:text-white">{t("passwordLink")}</Link>
             <form action={logout}>
