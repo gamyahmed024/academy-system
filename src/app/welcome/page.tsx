@@ -26,7 +26,7 @@ export async function generateMetadata() {
   return {
     title: { absolute: name },
     description,
-    openGraph: { type: "website", siteName: name, title: name, description, url: "/welcome", images: [OG_IMAGE] },
+    openGraph: { type: "website", siteName: name, title: name, description, images: [OG_IMAGE] },
     twitter: { card: "summary_large_image", title: name, description, images: [OG_IMAGE.url] },
   };
 }
