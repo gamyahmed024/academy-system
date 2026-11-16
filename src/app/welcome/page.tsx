@@ -16,11 +16,19 @@ import { listPricePlans } from "@/server/services/requests";
 import { LANGS } from "@/lib/i18n";
 import { nameFor } from "@/lib/academy-name";
 import Image from "next/image";
+import { OG_IMAGE } from "@/lib/og-image";
 
 export async function generateMetadata() {
   const { lang } = await getT();
   const s = await getSettings(getDb());
-  return { title: { absolute: nameFor(s, lang) }, description: LANDING[lang].metaDesc };
+  const name = nameFor(s, lang);
+  const description = LANDING[lang].metaDesc;
+  return {
+    title: { absolute: name },
+    description,
+    openGraph: { type: "website", siteName: name, title: name, description, images: [OG_IMAGE] },
+    twitter: { card: "summary_large_image", title: name, description, images: [OG_IMAGE.url] },
+  };
 }
 
 /** Digits only, as wa.me wants them. */
