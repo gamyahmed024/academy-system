@@ -89,30 +89,39 @@ export default async function Welcome() {
         </div>
       </header>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-sidebar via-brand-dark to-brand text-white">
-        <div aria-hidden className="pointer-events-none absolute -end-10 -top-16 select-none text-[22rem] leading-none font-extrabold text-sky opacity-[0.12]">
-          ض
+      {/* Same look as the link-preview picture (public/og-image.jpg): navy on the
+          text side fading into the Alhambra photo, the logo, name and tagline. */}
+      <section className="relative isolate overflow-hidden bg-sidebar text-white">
+        <div aria-hidden className="absolute inset-y-0 end-0 -z-10 w-full overflow-hidden lg:w-[62%]">
+          <Image src={PHOTO.hero.src} alt="" fill priority unoptimized sizes="(min-width: 1024px) 62vw, 100vw" className="drift object-cover" />
         </div>
-        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 sm:py-24 lg:grid-cols-2">
-          <div>
-            <p className="mb-4 inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-semibold text-sky">{x.heroTag}</p>
-            <h1 className="max-w-3xl text-3xl leading-snug font-extrabold sm:text-5xl sm:leading-tight">{x.heroTitle}</h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-white/85">{x.heroText}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#trial" className="rounded-xl bg-accent px-6 py-3 font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:brightness-110">
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-sidebar/80 lg:bg-transparent lg:bg-gradient-to-r lg:from-sidebar lg:from-40% lg:via-sidebar/80 lg:via-55% lg:to-sidebar/0 lg:rtl:bg-gradient-to-l"
+        />
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 sm:py-20 lg:min-h-[34rem] lg:grid-cols-2">
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-start">
+            <Logo size={120} letters className="float-soft drop-shadow-xl" />
+            <h1 className="mt-5 text-4xl leading-tight font-extrabold sm:text-6xl">{nameFor(s, lang)}</h1>
+            {lang !== "ar" && (
+              <p lang="ar" dir="rtl" className="mt-1 text-xl font-bold text-white/80">
+                {s.academyName}
+              </p>
+            )}
+            <p className="mt-3 text-xl font-semibold text-sky sm:text-2xl">{x.heroTag}</p>
+            <p className="mt-5 max-w-xl text-lg leading-8 text-white/90">
+              <span className="font-bold text-white">{x.heroTitle}.</span> {x.heroText}
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+              <a href="#trial" className="rounded-full bg-sky px-7 py-3 font-extrabold text-sidebar shadow-lg transition hover:-translate-y-0.5 hover:brightness-110">
                 {m.trial.cta}
               </a>
-              {contactBtn("rounded-xl border-2 border-white/70 px-6 py-3 font-bold transition hover:bg-white/10")}
-              <InstallApp texts={installTexts(LANGS[lang])} className="rounded-xl border-2 border-sky/70 px-6 py-3 font-bold text-sky transition hover:bg-white/10" />
+              {contactBtn("rounded-full border-2 border-white/70 px-6 py-3 font-bold transition hover:bg-white/10")}
+              <InstallApp texts={installTexts(LANGS[lang])} className="rounded-full border-2 border-sky/70 px-6 py-3 font-bold text-sky transition hover:bg-white/10" />
             </div>
           </div>
-          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-2xl ring-4 ring-white/20">
-              <Image src={PHOTO.hero.src} alt="" fill priority unoptimized sizes="(min-width: 1024px) 560px, 100vw" className="drift object-cover" />
-              <Image src={PHOTO.program2.src} alt="" fill unoptimized sizes="(min-width: 1024px) 560px, 100vw" className="hero-second object-cover" />
-              <Image src={PHOTO.program1.src} alt="" fill unoptimized sizes="(min-width: 1024px) 560px, 100vw" className="hero-third object-cover" />
-            </div>
-            <div className="float-soft absolute -bottom-6 start-4 rounded-2xl bg-white px-5 py-3 text-center shadow-xl sm:start-8">
+          <div className="relative hidden self-end lg:block">
+            <div className="float-soft absolute -bottom-6 end-6 rounded-2xl bg-white/95 px-5 py-3 text-center shadow-xl">
               <div dir="rtl" lang="ar" className="text-2xl leading-relaxed font-bold text-sidebar">
                 <Vowelled text={words[0].ar} />
               </div>
